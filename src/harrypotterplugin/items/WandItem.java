@@ -10,7 +10,8 @@ import harrypotterplugin.utilities.UsableItem;
 public class WandItem extends UsableItem {
 	
 	public WandItem() {
-		ItemBuilder itembuilder = new ItemBuilder("Wand", Material.CARROT_ON_A_STICK);
+		super(Material.CARROT_ON_A_STICK);
+		ItemBuilder itembuilder = new ItemBuilder("Wand");
 		itembuilder.setCustomModelData(1);
 		itembuilder.buildItem(this);
 	}
