@@ -7,13 +7,12 @@ import org.bukkit.inventory.ItemStack;
 import harrypotterplugin.utilities.ItemBuilder;
 import harrypotterplugin.utilities.UsableItem;
 
-public class WandItem implements UsableItem {
-
-	@Override
-	public ItemStack getItem() {
+public class WandItem extends UsableItem {
+	
+	public WandItem() {
 		ItemBuilder itembuilder = new ItemBuilder("Wand", Material.CARROT_ON_A_STICK);
 		itembuilder.setCustomModelData(1);
-		return itembuilder.buildItem();
+		itembuilder.buildItem(this);
 	}
 
 	@Override

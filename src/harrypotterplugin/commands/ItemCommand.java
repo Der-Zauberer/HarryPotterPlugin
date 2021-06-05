@@ -18,7 +18,7 @@ public class ItemCommand implements CommandExecutor {
 			inventory.setItemOption(ItemOption.GETABLE);
 			int i = 0;
 			for(UsableItem usableitem : ItemHandler.getUsableitems()) {
-				inventory.setItem(i, usableitem.getItem());
+				inventory.setItem(i, usableitem);
 				i++;
 			}
 			inventory.open();
