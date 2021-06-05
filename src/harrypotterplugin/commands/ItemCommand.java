@@ -4,8 +4,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
+import harrypotterplugin.handler.ItemHandler;
 import harrypotterplugin.utilities.PlayerInventory;
+import harrypotterplugin.utilities.UsableItem;
 import harrypotterplugin.utilities.PlayerInventory.ItemOption;
 
 public class ItemCommand implements CommandExecutor {
@@ -15,6 +16,11 @@ public class ItemCommand implements CommandExecutor {
 		if(sender instanceof Player) {
 			PlayerInventory inventory = new PlayerInventory((Player) sender, 9, "Harry Potter Items");
 			inventory.setItemOption(ItemOption.GETABLE);
+			int i = 0;
+			for(UsableItem usableitem : ItemHandler.getUsableitems()) {
+				inventory.setItem(i, usableitem.getItem());
+				i++;
+			}
 			inventory.open();
 		}
 		return true;
