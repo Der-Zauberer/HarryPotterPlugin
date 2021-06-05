@@ -1,0 +1,16 @@
+main: harrypotterplugin.main.HarryPotterPlugin
+name: HarryPotterPlugin
+version: 1.0
+author: Der_Zauberer
+api-version: 1.14
+
+commands:
+  harrypotterplugin:
+    description: Open the inventory for items
+    usage: /<command>
+    permission: harrypotterplugin.command.harrypotterplugin
+
+permissions:
+  harrypotterplugin.command.harrypotterplugin:
+    description: Open the inventory for items
+    default: op
