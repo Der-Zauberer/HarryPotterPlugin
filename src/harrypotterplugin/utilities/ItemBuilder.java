@@ -1,11 +1,14 @@
 package harrypotterplugin.utilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -19,28 +22,33 @@ public class ItemBuilder {
 	private List<String> lore;
 	private int custommodeldata;
 	private ItemStack itemstack;
+	private ItemMeta itemmeta;
 	
 	public ItemBuilder() {
 		displayname = "Example Soward";
 		material = Material.WOODEN_SWORD;
 		custommodeldata = 0;
+		itemmeta = new ItemStack(material).getItemMeta();
 	}
 	
 	public ItemBuilder(Material material) {
 		displayname = "Example Soward";
 		this.material = material;
 		custommodeldata = 0;
+		itemmeta = new ItemStack(material).getItemMeta();
 	}
 	
 	public ItemBuilder(String displayname) {
 		this.displayname = displayname;
 		material = Material.WOODEN_SWORD;
 		custommodeldata = 0;
+		itemmeta = new ItemStack(material).getItemMeta();
 	}
 	
 	public ItemBuilder(String displayname, Material material) {
 		this.displayname = displayname;
 		this.material = material;
+		itemmeta = new ItemStack(material).getItemMeta();
 	}
 	
 	public void setDisplayName(String displayname) {
@@ -63,6 +71,15 @@ public class ItemBuilder {
 		this.lore = lore;
 	}
 	
+	public void setLore(String string) {
+		String[] list = string.split("\n");
+		List<String> lore = new ArrayList<>();
+		for (int i = 0; i < list.length; i++) {
+			lore.add(list[i]);
+		}
+		this.lore = lore;
+	}
+	
 	public List<String> getLore() {
 		return lore;
 	}
@@ -75,9 +92,17 @@ public class ItemBuilder {
 		return custommodeldata;
 	}
 	
+	public void addEnchantment(Enchantment enchantment, int level) {
+		itemmeta.addEnchant(enchantment, level, true);
+	}
+	
+	public void hideEnchantments() {
+		itemmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+	}
+	
 	public void addPotionMeta(Color color, PotionEffect potioneffect) {
 		if(itemstack != null && material == Material.POTION) {
-			PotionMeta potionmeta = (PotionMeta) itemstack.getItemMeta();
+			PotionMeta potionmeta = (PotionMeta) itemmeta;
 			potionmeta.setColor(color);
 			potionmeta.addCustomEffect(potioneffect, true);
 			itemstack.setItemMeta(potionmeta);
@@ -86,7 +111,7 @@ public class ItemBuilder {
 	
 	public void addPlayerSkullMeta(Player player) {
 		if(itemstack != null && material == Material.PLAYER_HEAD) {
-			SkullMeta skullmeta = (SkullMeta) itemstack.getItemMeta();
+			SkullMeta skullmeta = (SkullMeta) itemmeta;
 			skullmeta.setOwningPlayer(player);
 			itemstack.setItemMeta(skullmeta);
 		}
@@ -99,7 +124,6 @@ public class ItemBuilder {
 	}
 	
 	public void buildItem(ItemStack itemstack) {
-		ItemMeta itemmeta = itemstack.getItemMeta();
 		itemmeta.setDisplayName(ChatColor.RESET + displayname);
 		if(lore != null) {
 			itemmeta.setLore(lore);
