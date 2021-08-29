@@ -6,6 +6,7 @@
   <name>HarryPotterPlugin</name>
   <packaging>jar</packaging>
   <build>
+    <finalName>HarryPotter</finalName>
     <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
