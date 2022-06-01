@@ -14,7 +14,7 @@ public class ItemCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender instanceof Player) {
-			PlayerInventory inventory = new PlayerInventory((Player) sender, 9, "Harry Potter Items");
+			PlayerInventory inventory = new PlayerInventory((Player) sender, 18, "Harry Potter Items");
 			inventory.setItemOption(ItemOption.GETABLE);
 			int i = 0;
 			for(UsableItem usableitem : ItemHandler.getUsableitems()) {

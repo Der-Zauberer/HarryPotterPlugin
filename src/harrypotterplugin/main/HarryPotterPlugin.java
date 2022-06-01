@@ -7,6 +7,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import harrypotterplugin.commands.ItemCommand;
 import harrypotterplugin.events.HarryPotterPluginListener;
+import harrypotterplugin.handler.ExtendedItemHandler;
 import harrypotterplugin.handler.InventoryHandler;
 import harrypotterplugin.handler.ItemHandler;
 import harrypotterplugin.items.BroomstickItem;
@@ -38,6 +39,7 @@ public class HarryPotterPlugin extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new HarryPotterPluginListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryHandler(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemHandler(), this);
+		Bukkit.getPluginManager().registerEvents(new ExtendedItemHandler(), this);
 	}
 	
 	private void registerItem() {
