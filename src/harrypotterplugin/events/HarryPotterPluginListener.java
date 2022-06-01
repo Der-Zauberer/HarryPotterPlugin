@@ -23,17 +23,17 @@ public class HarryPotterPluginListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		event.getPlayer().discoverRecipes(ItemHandler.getNamespacekeys());
+		event.getPlayer().discoverRecipes(ItemHandler.getNamespacedKeys());
 	}
 	
 	@EventHandler
 	public void onEntityTarget(EntityTargetEvent event) {
 		if(event.getEntityType() == EntityType.PIG && event.getTarget() instanceof Player) {
-			ItemStack mainitem = ((Player)event.getTarget()).getInventory().getItemInMainHand();
-			ItemStack secondaryitem = ((Player)event.getTarget()).getInventory().getItemInOffHand();
-			if(mainitem.getType() == Material.CARROT_ON_A_STICK && mainitem.hasItemMeta() && mainitem.getItemMeta().hasCustomModelData() && mainitem.getItemMeta().getCustomModelData() != 0) {
+			ItemStack mainItem = ((Player)event.getTarget()).getInventory().getItemInMainHand();
+			ItemStack secondaryItem = ((Player)event.getTarget()).getInventory().getItemInOffHand();
+			if(mainItem.getType() == Material.CARROT_ON_A_STICK && mainItem.hasItemMeta() && mainItem.getItemMeta().hasCustomModelData() && mainItem.getItemMeta().getCustomModelData() != 0) {
 				event.setCancelled(true);
-			} else if(secondaryitem.getType() == Material.CARROT_ON_A_STICK && secondaryitem.hasItemMeta() && secondaryitem.getItemMeta().hasCustomModelData() && secondaryitem.getItemMeta().getCustomModelData() != 0) {
+			} else if(secondaryItem.getType() == Material.CARROT_ON_A_STICK && secondaryItem.hasItemMeta() && secondaryItem.getItemMeta().hasCustomModelData() && secondaryItem.getItemMeta().getCustomModelData() != 0) {
 				event.setCancelled(true);
 			}
 		}
@@ -44,31 +44,31 @@ public class HarryPotterPluginListener implements Listener {
 	@EventHandler
 	public void onDamage(EntityDamageEvent event) {
 		if(event.getEntity() instanceof Player && event.getCause() == DamageCause.FALL && event.getDamage() != 0) {
-			ArrayList<ItemStack> brokenitems = new ArrayList<>();
-			for(ItemStack itemstack : ((Player)event.getEntity()).getInventory()) {
-				if(itemstack != null && ItemHandler.isItem(itemstack, Material.CARROT_ON_A_STICK, 22)) {
+			ArrayList<ItemStack> brokenItems = new ArrayList<>();
+			for(ItemStack itemStack : ((Player)event.getEntity()).getInventory()) {
+				if(itemStack != null && ItemHandler.isItem(itemStack, Material.CARROT_ON_A_STICK, 22)) {
 					double damage = event.getDamage();
-					if(itemstack.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
-						if(itemstack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 1) {
+					if(itemStack.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
+						if(itemStack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 1) {
 							damage = damage / 1.5;
-						} else if(itemstack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 2) {
+						} else if(itemStack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 2) {
 							damage = damage / 2;
-						} else if(itemstack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 3) {
+						} else if(itemStack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 3) {
 							damage = damage / 2.5;
 						}
 					}
-					if((itemstack.getDurability() + damage < 25)) {
-						itemstack.setDurability((short)(itemstack.getDurability() + damage));
+					if((itemStack.getDurability() + damage < 25)) {
+						itemStack.setDurability((short)(itemStack.getDurability() + damage));
 						event.setDamage(0);
 					} else {
-						event.setDamage(event.getDamage() - (25 - itemstack.getDurability()));
-						itemstack.setDurability((short) 25);
-						brokenitems.add(itemstack);
+						event.setDamage(event.getDamage() - (25 - itemStack.getDurability()));
+						itemStack.setDurability((short) 25);
+						brokenItems.add(itemStack);
 					}
 				}
 			}
-			for (int i = 0; i < brokenitems.size(); i++) {
-				((Player)event.getEntity()).getInventory().remove(brokenitems.get(i));
+			for (int i = 0; i < brokenItems.size(); i++) {
+				((Player)event.getEntity()).getInventory().remove(brokenItems.get(i));
 			}
 		}
 	}

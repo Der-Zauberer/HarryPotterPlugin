@@ -25,6 +25,12 @@ public class ExtendedItem extends ItemStack {
 		setItemMeta(itemMeta);
 	}
 	
+	public void setDisplayName(String displayName) {
+		ItemMeta itemMeta = getItemMeta();
+		itemMeta.setDisplayName(displayName);
+		setItemMeta(itemMeta);
+	}
+	
 	public void setCustomModelData(int customModelData) {
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.setCustomModelData(customModelData);

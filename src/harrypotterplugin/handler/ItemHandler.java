@@ -1,69 +1,56 @@
 package harrypotterplugin.handler;
 
 import java.util.ArrayList;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import harrypotterplugin.utilities.UsableItem;
+import harrypotterplugin.utilities.ExtendedItem;
 
 public class ItemHandler implements Listener {
+
+	private static ArrayList<ExtendedItem> items = new ArrayList<>();
+	private static ArrayList<NamespacedKey> namespacedKeys = new ArrayList<>();
 	
-	private static ArrayList<UsableItem> usableitems = new ArrayList<>();
-	private static ArrayList<NamespacedKey> namespacekeys = new ArrayList<>();
-	
-	public static void registerItem(UsableItem usableitem) {
-		usableitems.add(usableitem);
+	public static void registerItem(ExtendedItem item) {
+		items.add(item);
 	}
 	
-	public static ArrayList<UsableItem> getUsableitems() {
-		return usableitems;
+	public static ArrayList<ExtendedItem> getItems() {
+		return items;
 	}
 	
-	public static void registerNameSpaceKey(NamespacedKey key) {
-		namespacekeys.add(key);
+	public static void registerNameSpaceKey(NamespacedKey namespacedKey) {
+		namespacedKeys.add(namespacedKey);
 	}
 	
-	public static ArrayList<NamespacedKey> getNamespacekeys() {
-		return namespacekeys;
-	}
-	
-	public static UsableItem getItem(String name) {
-		String realname = ChatColor.stripColor(name);
-		String namewithoutspaces = realname.replace("_", " ");
-		for(UsableItem usableitem : usableitems) {
-			String itemname = ChatColor.stripColor(usableitem.getItemMeta().getDisplayName());
-			if(itemname.equalsIgnoreCase(name) || itemname.equalsIgnoreCase(namewithoutspaces)) {
-				return usableitem;
-			}
-		}
-		return null;
-	}
-	
-	public static UsableItem getItemFunction(ItemStack itemstack) {
-		for (UsableItem usableitem : usableitems) {
-			if(usableitem.getType().equals(itemstack.getType())) {
-				if(itemstack.getItemMeta().hasCustomModelData() && usableitem.getItemMeta().getCustomModelData() == itemstack.getItemMeta().getCustomModelData()) {
-					return usableitem;
-				}
-			}
-		}
-		return null;
+	public static ArrayList<NamespacedKey> getNamespacedKeys() {
+		return namespacedKeys;
 	}
 	
 	@EventHandler
-	public void onInteract(PlayerInteractEvent event) {
-		ItemStack itemstack = event.getPlayer().getInventory().getItemInMainHand();
-		UsableItem itemfunction = getItemFunction(itemstack);
-		if(event.getHand() == EquipmentSlot.HAND) {
-			if(itemfunction != null) {
-				itemfunction.onItemUse(event.getPlayer(), itemstack, event.getAction());
+	public static void onPlayerInteract(PlayerInteractEvent event) {
+		ExtendedItem item;
+		if ((item = getItem(event.getItem())) != null) {
+			if (item.getOnInteract() != null) item.getOnInteract().onAction(event);
+			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+				if (item.getOnLeftClick() != null) item.getOnLeftClick().onAction(event);
+			} else if  (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				if (item.getOnRightClick() != null) item.getOnRightClick().onAction(event);
 			}
 		}
+	}
+	
+	public static ExtendedItem getItem(ItemStack itemStack) {
+		for (ExtendedItem item : items) {
+			if (itemStack != null && item.getType() == itemStack.getType() && itemStack.hasItemMeta() && itemStack.getItemMeta().hasCustomModelData() && item.getItemMeta().getCustomModelData() == itemStack.getItemMeta().getCustomModelData()) {
+				return item;
+			}
+		}
+		return null;
 	}
 	
 	public static boolean isItem(ItemStack itemstack, Material material, int custommodeldata) {

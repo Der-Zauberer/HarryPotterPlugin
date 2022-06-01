@@ -1,7 +1,6 @@
 package harrypotterplugin.items;
 
 import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,99 +9,95 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import harrypotterplugin.main.HarryPotterPlugin;
-import harrypotterplugin.utilities.ItemBuilder;
-import harrypotterplugin.utilities.UsableItem;
+import harrypotterplugin.utilities.ExtendedItem;
 
-public class BroomstickItem extends UsableItem {
+public class BroomstickItem extends ExtendedItem {
 	
 	public enum BroomstickType {SHOOTING_STAR, NIMBUS_2000, NIMBUS_2001, FIREBOLD};
 	private static HashMap<Player, Integer> states = new HashMap<>();
 	private static HashMap<Player, Integer> tasks = new HashMap<>();
 
 	public BroomstickItem(BroomstickType type) {
-		super(Material.CARROT_ON_A_STICK);
-		ItemBuilder itembuilder = new ItemBuilder();
+		super("Broomstick", Material.CARROT_ON_A_STICK, 0);
 		switch (type) {
 		case SHOOTING_STAR:
-			itembuilder.setDisplayName("Shooting Star");
-			itembuilder.setLore(ChatColor.GRAY + "Produced by Universal Brooms Ltd in 1955");
-			itembuilder.setCustomModelData(11);
+			setDisplayName("Shooting Star");
+			setLore(ChatColor.GRAY + "Produced by Universal Brooms Ltd in 1955");
+			setCustomModelData(11);
 			break;
 		case NIMBUS_2000:
-			itembuilder.setDisplayName("Nimbus 2000");
-			itembuilder.setLore(ChatColor.GRAY + "Produced by Nimbus Racing Broom Company in 1991");
-			itembuilder.setCustomModelData(12);
+			setDisplayName("Nimbus 2000");
+			setLore(ChatColor.GRAY + "Produced by Nimbus Racing Broom Company in 1991");
+			setCustomModelData(12);
 			break;
 		case NIMBUS_2001:
-			itembuilder.setDisplayName("Nimbus 2001");
-			itembuilder.setLore(ChatColor.GRAY + "Produced by Nimbus Racing Broom Company in 1992");
-			itembuilder.setCustomModelData(13);
+			setDisplayName("Nimbus 2001");
+			setLore(ChatColor.GRAY + "Produced by Nimbus Racing Broom Company in 1992");
+			setCustomModelData(13);
 			break;
 		case FIREBOLD:
-			itembuilder.setDisplayName("Firebold");
-			itembuilder.setLore(ChatColor.GRAY + "Produced by Randolph Spudmore in 1993");
-			itembuilder.setCustomModelData(14);
+			setDisplayName("Firebold");
+			setLore(ChatColor.GRAY + "Produced by Randolph Spudmore in 1993");
+			setCustomModelData(14);
 			break;
 		default:
 			break;
 		}
-		itembuilder.buildItem(this);
-	}
-
-	@Override
-	public void onItemUse(Player player, ItemStack itemstack, Action action) {
-		if(states.get(player) == null) {
-			states.put(player, 0);
-		}
-		int state = states.get(player);
-		if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-			if(state == 0 || state == 2) {
-				state = 1;
-			} else {
-				state = 2;
+		setOnInteract(event -> {
+			Player player = event.getPlayer();
+			ItemStack itemStack = event.getItem();
+			Action action = event.getAction();
+			if(states.get(player) == null) {
+				states.put(player, 0);
 			}
-			if(tasks.get(player) == null) {
-				int taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), new Runnable() {
-				    @SuppressWarnings("deprecation")
-					@Override
-				    public void run() {
-				    	if((!player.getInventory().getItemInMainHand().equals(itemstack) && !player.getInventory().getItemInOffHand().equals(itemstack)) || player.isOnGround()) {
-				    		player.removePotionEffect(PotionEffectType.LEVITATION);
-							player.removePotionEffect(PotionEffectType.SLOW_FALLING);
-							player.removePotionEffect(PotionEffectType.SPEED);
-				    		Bukkit.getScheduler().cancelTask(tasks.get(player));
-				    		tasks.remove(player);
-				    		states.remove(player);
-				    	}
-				    }
-				}, 10L, 5L);
-				tasks.put(player, taskid);
+			int state = states.get(player);
+			if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+				if(state == 0 || state == 2) {
+					state = 1;
+				} else {
+					state = 2;
+				}
+				if(tasks.get(player) == null) {
+					int taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), new Runnable() {
+					    @SuppressWarnings("deprecation")
+						@Override
+					    public void run() {
+					    	if((!player.getInventory().getItemInMainHand().equals(itemStack) && !player.getInventory().getItemInOffHand().equals(itemStack)) || player.isOnGround()) {
+					    		player.removePotionEffect(PotionEffectType.LEVITATION);
+								player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+								player.removePotionEffect(PotionEffectType.SPEED);
+					    		Bukkit.getScheduler().cancelTask(tasks.get(player));
+					    		tasks.remove(player);
+					    		states.remove(player);
+					    	}
+					    }
+					}, 10L, 5L);
+					tasks.put(player, taskid);
+				}
+			} else if(action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+				state = 0;
 			}
-		} else if(action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-			state = 0;
-		}
-		states.put(player, state);
-		switch (state) {
-		case 0:
-			player.removePotionEffect(PotionEffectType.LEVITATION);
-			player.removePotionEffect(PotionEffectType.SLOW_FALLING);
-			player.removePotionEffect(PotionEffectType.SPEED);
-			break;
-		case 1:
-			player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100000, getLevitationStrenght(itemstack)));
-			if(itemstack.getItemMeta().getCustomModelData() != 11) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100000, getSpeedStrenght(itemstack)));
-			player.removePotionEffect(PotionEffectType.SLOW_FALLING);
-			break;
-		case 2:
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 100000, getFallingStrenght(itemstack)));
-			if(itemstack.getItemMeta().getCustomModelData() != 11) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100000, getSpeedStrenght(itemstack)));
-			player.removePotionEffect(PotionEffectType.LEVITATION);
-			break;
-		default: break;
-		}
-			
+			states.put(player, state);
+			switch (state) {
+			case 0:
+				player.removePotionEffect(PotionEffectType.LEVITATION);
+				player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+				player.removePotionEffect(PotionEffectType.SPEED);
+				break;
+			case 1:
+				player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100000, getLevitationStrenght(itemStack)));
+				if(itemStack.getItemMeta().getCustomModelData() != 11) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100000, getSpeedStrenght(itemStack)));
+				player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+				break;
+			case 2:
+				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 100000, getFallingStrenght(itemStack)));
+				if(itemStack.getItemMeta().getCustomModelData() != 11) player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100000, getSpeedStrenght(itemStack)));
+				player.removePotionEffect(PotionEffectType.LEVITATION);
+				break;
+			default: break;
+			}
+		});
 	}
 	
 	private int getLevitationStrenght(ItemStack itemstack) {
