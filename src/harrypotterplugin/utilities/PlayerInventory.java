@@ -3,14 +3,11 @@ package harrypotterplugin.utilities;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
+import harrypotterplugin.actions.InventoryClickAction;
 import harrypotterplugin.handler.InventoryHandler;
 
 public class PlayerInventory {
@@ -20,57 +17,29 @@ public class PlayerInventory {
 	private Inventory inventory;
 	private ItemOption itemoption;
 	private Player player;
-	private HashMap<ItemStack, ActionEvent> events = new HashMap<>();
+	private HashMap<ItemStack, InventoryClickAction> events = new HashMap<>();
 
 	public PlayerInventory(Player player, int number, String name) {
 		this.player = player;
 		inventory = Bukkit.createInventory(player, number, name);
 	}
 	
-	public static ItemStack createItem(String name, Material material) {
-		return new ItemBuilder(name, material).buildItem();
+	public void setItem(int slot, ItemStack itemStack, InventoryClickAction action) {
+		inventory.setItem(slot, itemStack);
+		events.put(itemStack, action);
 	}
 	
-	public static ItemStack createPotionItem(String name, Color color, PotionEffectType potioneffect) {
-		ItemBuilder itembuilder = new ItemBuilder(name, Material.POTION);
-		itembuilder.buildItem();
-		itembuilder.addPotionMeta(color, new PotionEffect(potioneffect, 3600, 2));
-		return itembuilder.getItemStack();
+	public void setItem(int slot, ItemStack itemStack) {
+		inventory.setItem(slot, itemStack);
 	}
 	
-	public static ItemStack createPlayerSkullItem(String name, Player player) {
-		ItemBuilder itembuilder = new ItemBuilder(name, Material.PLAYER_HEAD);
-		itembuilder.buildItem();
-		itembuilder.addPlayerSkullMeta(player);
-		return itembuilder.getItemStack();
+	public void setEvent(ItemStack itemStack, InventoryClickAction action) {
+		events.put(itemStack, action);
 	}
 	
-	public static ItemStack createBooleanItem(String name, boolean defaults) {
-		ItemBuilder itembuilder;
-		if(defaults) {
-			itembuilder = new ItemBuilder(name + " true", Material.GREEN_DYE);
-		} else {
-			itembuilder = new ItemBuilder(name + " false", Material.RED_DYE);
-		}
-		return itembuilder.buildItem();
-	}
-	
-	public void setItem(int slot, ItemStack itemstack, ActionEvent event) {
-		inventory.setItem(slot, itemstack);
-		events.put(itemstack, event);
-	}
-	
-	public void setItem(int slot, ItemStack itemstack) {
-		inventory.setItem(slot, itemstack);
-	}
-	
-	public void setEvent(ItemStack itemstack, ActionEvent event) {
-		events.put(itemstack, event);
-	}
-	
-	public void onItemClicked(ItemStack itemstack) {
-		if(events.containsKey(itemstack)) {
-			events.get(itemstack).executeOnAction(itemstack);
+	public void onItemClicked(ItemStack itemStack) {
+		if(events.containsKey(itemStack)) {
+			events.get(itemStack).onAction(itemStack);
 		}
 	}
 	
@@ -88,8 +57,8 @@ public class PlayerInventory {
 		inventory.clear();
 	}
 	
-	public void setItemOption(ItemOption itemoption) {
-		this.itemoption = itemoption;
+	public void setItemOption(ItemOption itemOption) {
+		this.itemoption = itemOption;
 	}
 	
 	public ItemOption getItemOption() {
