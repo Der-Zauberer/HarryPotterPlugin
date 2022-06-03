@@ -30,17 +30,17 @@ public class HarryPotterPlugin extends JavaPlugin {
 		registerCraftingRecipes();
 	}
 
-	private void registerCommands() {
-		getCommand("HarryPotterPlugin").setExecutor(new ItemCommand());
+	private static void registerCommands() {
+		instance.getCommand("HarryPotterPlugin").setExecutor(new ItemCommand());
 	}
 	
 	private void registerEvents() {
-		Bukkit.getPluginManager().registerEvents(new HarryPotterPluginListener(), this);
-		Bukkit.getPluginManager().registerEvents(new InventoryHandler(), this);
-		Bukkit.getPluginManager().registerEvents(new ItemHandler(), this);
+		Bukkit.getPluginManager().registerEvents(new HarryPotterPluginListener(), instance);
+		Bukkit.getPluginManager().registerEvents(new InventoryHandler(), instance);
+		Bukkit.getPluginManager().registerEvents(new ItemHandler(), instance);
 	}
 	
-	private void registerItem() {
+	private static void registerItem() {
 		ItemHandler.registerItem(new WandItem());
 		ItemHandler.registerItem(new BroomstickItem(BroomstickType.SHOOTING_STAR));
 		ItemHandler.registerItem(new BroomstickItem(BroomstickType.NIMBUS_2000));
@@ -52,7 +52,7 @@ public class HarryPotterPlugin extends JavaPlugin {
 		ItemHandler.registerItem(new GoldenFeatherItem());
 	}
 	
-	private void registerCraftingRecipes() {
+	private static void registerCraftingRecipes() {
 		Bukkit.getServer().addRecipe(new ShapedRecipe(createNamespacedKey("shooting_star"), new BroomstickItem(BroomstickType.SHOOTING_STAR)).shape("  S", "HS ", "HH ").setIngredient('S', Material.STICK).setIngredient('H', Material.HAY_BLOCK));
 		Bukkit.getServer().addRecipe(new ShapedRecipe(createNamespacedKey("nimbus_2000"), new BroomstickItem(BroomstickType.NIMBUS_2000)).shape("  S", "BS ", "BB ").setIngredient('S', Material.STICK).setIngredient('B', Material.BLAZE_ROD));
 		Bukkit.getServer().addRecipe(new ShapedRecipe(createNamespacedKey("nimbus_2001"), new BroomstickItem(BroomstickType.NIMBUS_2000)).shape("  S", "ES ", "WE ").setIngredient('S', Material.BLAZE_ROD).setIngredient('E', Material.ENDER_EYE).setIngredient('W', Material.WITHER_SKELETON_SKULL));
@@ -63,8 +63,8 @@ public class HarryPotterPlugin extends JavaPlugin {
 		Bukkit.getServer().addRecipe(new ShapedRecipe(createNamespacedKey("golden_feather"), new GoldenFeatherItem()).shape("GGG", "GFG", "GGG").setIngredient('G', Material.GOLD_INGOT).setIngredient('F', Material.FEATHER));
 	}
 	
-	public NamespacedKey createNamespacedKey(String string) {
-		NamespacedKey namespacedKey = new NamespacedKey(this, string);
+	public static NamespacedKey createNamespacedKey(String string) {
+		NamespacedKey namespacedKey = new NamespacedKey(instance, string);
 		ItemHandler.registerNameSpaceKey(namespacedKey);
 		return namespacedKey;
 	}

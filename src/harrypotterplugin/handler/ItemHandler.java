@@ -8,18 +8,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import harrypotterplugin.utilities.ExtendedItem;
+import harrypotterplugin.utilities.ExtendedItemStack;
 
 public class ItemHandler implements Listener {
 
-	private static ArrayList<ExtendedItem> items = new ArrayList<>();
+	private static ArrayList<ExtendedItemStack> items = new ArrayList<>();
 	private static ArrayList<NamespacedKey> namespacedKeys = new ArrayList<>();
 	
-	public static void registerItem(ExtendedItem item) {
+	public static void registerItem(ExtendedItemStack item) {
 		items.add(item);
 	}
 	
-	public static ArrayList<ExtendedItem> getItems() {
+	public static ArrayList<ExtendedItemStack> getItems() {
 		return items;
 	}
 	
@@ -33,7 +33,7 @@ public class ItemHandler implements Listener {
 	
 	@EventHandler
 	public static void onPlayerInteract(PlayerInteractEvent event) {
-		ExtendedItem item;
+		ExtendedItemStack item;
 		if ((item = getItem(event.getItem())) != null) {
 			if (item.getOnInteract() != null) item.getOnInteract().onAction(event);
 			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -44,8 +44,8 @@ public class ItemHandler implements Listener {
 		}
 	}
 	
-	public static ExtendedItem getItem(ItemStack itemStack) {
-		for (ExtendedItem item : items) {
+	public static ExtendedItemStack getItem(ItemStack itemStack) {
+		for (ExtendedItemStack item : items) {
 			if (itemStack != null && item.getType() == itemStack.getType() && itemStack.hasItemMeta() && itemStack.getItemMeta().hasCustomModelData() && item.getItemMeta().getCustomModelData() == itemStack.getItemMeta().getCustomModelData()) {
 				return item;
 			}

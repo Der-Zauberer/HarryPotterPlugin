@@ -2,9 +2,9 @@ package harrypotterplugin.items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import harrypotterplugin.utilities.ExtendedItem;
+import harrypotterplugin.utilities.ExtendedItemStack;
 
-public class GoldenFeatherItem extends ExtendedItem {
+public class GoldenFeatherItem extends ExtendedItemStack {
 
 	public GoldenFeatherItem() {
 		super("Golden Feather", Material.CARROT_ON_A_STICK, 22);

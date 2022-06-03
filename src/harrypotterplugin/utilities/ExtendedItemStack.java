@@ -16,13 +16,13 @@ import harrypotterplugin.actions.ItemInteractAction;
 import harrypotterplugin.actions.ItemLeftClickAction;
 import harrypotterplugin.actions.ItemRightClickAction;
 
-public class ExtendedItem extends ItemStack {
+public class ExtendedItemStack extends ItemStack {
 	
 	private ItemInteractAction interactAction;
 	private ItemLeftClickAction leftClickAction;
 	private ItemRightClickAction rightClickAction;
 	
-	public ExtendedItem(String displayName, Material material, int customModelData) {
+	public ExtendedItemStack(String displayName, Material material, int customModelData) {
 		super(material);
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.setDisplayName(ChatColor.RESET + displayName);
@@ -30,28 +30,28 @@ public class ExtendedItem extends ItemStack {
 		setItemMeta(itemMeta);
 	}
 	
-	public ExtendedItem(String displayName, Material material) {
+	public ExtendedItemStack(String displayName, Material material) {
 		super(material);
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.setDisplayName(ChatColor.RESET + displayName);
 		setItemMeta(itemMeta);
 	}
 	
-	public ExtendedItem setDisplayName(String displayName) {
+	public ExtendedItemStack setDisplayName(String displayName) {
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.setDisplayName(ChatColor.RESET + displayName);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
-	public ExtendedItem setCustomModelData(int customModelData) {
+	public ExtendedItemStack setCustomModelData(int customModelData) {
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.setCustomModelData(customModelData);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
-	public ExtendedItem setLore(String string) {
+	public ExtendedItemStack setLore(String string) {
 		String[] list = string.split("\n");
 		List<String> lore = new ArrayList<>();
 		for (String line : list) lore.add(line);
@@ -61,35 +61,35 @@ public class ExtendedItem extends ItemStack {
 		return this;
 	}
 	
-	public ExtendedItem setLore(List<String> lore) {
+	public ExtendedItemStack setLore(List<String> lore) {
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.setLore(lore);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
-	public ExtendedItem removeLore() {
+	public ExtendedItemStack removeLore() {
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.setLore(new ArrayList<String>());
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
-	public ExtendedItem addItemFlag(ItemFlag flag) {
+	public ExtendedItemStack addItemFlag(ItemFlag flag) {
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.addItemFlags(flag);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
-	public ExtendedItem removeItemFlag(ItemFlag flag) {
+	public ExtendedItemStack removeItemFlag(ItemFlag flag) {
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.removeItemFlags(flag);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
-	public ExtendedItem addPotionMeta(Color color, PotionEffect effect) {
+	public ExtendedItemStack addPotionMeta(Color color, PotionEffect effect) {
 		if(getType() == Material.POTION) {
 			PotionMeta potionMeta = (PotionMeta) getItemMeta();
 			potionMeta.setColor(color);
@@ -99,7 +99,7 @@ public class ExtendedItem extends ItemStack {
 		return this;
 	}
 	
-	public ExtendedItem addPlayerSkullMeta(Player player) {
+	public ExtendedItemStack addPlayerSkullMeta(Player player) {
 		if(getType() == Material.PLAYER_HEAD) {
 			SkullMeta skullMeta = (SkullMeta) getItemMeta();
 			skullMeta.setOwningPlayer(player);

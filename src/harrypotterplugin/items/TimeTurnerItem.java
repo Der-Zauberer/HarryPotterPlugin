@@ -4,9 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import harrypotterplugin.main.HarryPotterPlugin;
-import harrypotterplugin.utilities.ExtendedItem;
+import harrypotterplugin.utilities.ExtendedItemStack;
 
-public class TimeTurnerItem extends ExtendedItem {
+public class TimeTurnerItem extends ExtendedItemStack {
 	
 	private static boolean isInUse = false;
 	private int taskid = 0;

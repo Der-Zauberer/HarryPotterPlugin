@@ -10,9 +10,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import harrypotterplugin.main.HarryPotterPlugin;
-import harrypotterplugin.utilities.ExtendedItem;
+import harrypotterplugin.utilities.ExtendedItemStack;
 
-public class BroomstickItem extends ExtendedItem {
+public class BroomstickItem extends ExtendedItemStack {
 	
 	public enum BroomstickType {SHOOTING_STAR, NIMBUS_2000, NIMBUS_2001, FIREBOLD};
 	private static HashMap<Player, Integer> states = new HashMap<>();
