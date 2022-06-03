@@ -1,9 +1,9 @@
 package harrypotterplugin.actions;
 
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 public interface InventoryClickAction {
 	
-	public abstract void onAction(ItemStack itemstack);
+	public abstract void onAction(InventoryClickEvent event);
 
 }

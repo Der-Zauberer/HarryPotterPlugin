@@ -7,18 +7,17 @@ import org.bukkit.entity.Player;
 import harrypotterplugin.handler.ItemHandler;
 import harrypotterplugin.utilities.ExtendedItemStack;
 import harrypotterplugin.utilities.PlayerInventory;
-import harrypotterplugin.utilities.PlayerInventory.ItemOption;
 
 public class ItemCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender instanceof Player) {
-			PlayerInventory inventory = new PlayerInventory((Player) sender, 9, "Harry Potter Items");
-			inventory.setItemOption(ItemOption.GETABLE);
+			PlayerInventory inventory = new PlayerInventory((Player) sender, 1, "Harry Potter Items");
+			inventory.setFixed(true);
 			int i = 0;
-			for(ExtendedItemStack item : ItemHandler.getItems()) {
-				inventory.setItem(i, item);
+			for(ExtendedItemStack itemStack : ItemHandler.getItems()) {
+				inventory.setItem(i, itemStack, event -> event.getWhoClicked().getInventory().addItem(event.getCurrentItem()));
 				i++;
 			}
 			inventory.open();

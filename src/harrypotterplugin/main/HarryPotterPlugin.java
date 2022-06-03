@@ -8,10 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import harrypotterplugin.commands.ItemCommand;
 import harrypotterplugin.events.HarryPotterPluginListener;
 import harrypotterplugin.handler.ItemHandler;
-import harrypotterplugin.handler.InventoryHandler;
 import harrypotterplugin.items.BroomstickItem;
 import harrypotterplugin.items.WandItem;
 import harrypotterplugin.items.BroomstickItem.BroomstickType;
+import harrypotterplugin.utilities.PlayerInventory;
 import harrypotterplugin.items.GoldenFeatherItem;
 import harrypotterplugin.items.MagicalAxeItem;
 import harrypotterplugin.items.MagicalPickaxeItem;
@@ -36,7 +36,7 @@ public class HarryPotterPlugin extends JavaPlugin {
 	
 	private void registerEvents() {
 		Bukkit.getPluginManager().registerEvents(new HarryPotterPluginListener(), instance);
-		Bukkit.getPluginManager().registerEvents(new InventoryHandler(), instance);
+		Bukkit.getPluginManager().registerEvents(PlayerInventory.getInstance(), instance);
 		Bukkit.getPluginManager().registerEvents(new ItemHandler(), instance);
 	}
 	

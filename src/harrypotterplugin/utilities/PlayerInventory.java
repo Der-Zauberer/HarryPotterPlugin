@@ -1,72 +1,100 @@
 package harrypotterplugin.utilities;
 
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
 import harrypotterplugin.actions.InventoryClickAction;
-import harrypotterplugin.handler.InventoryHandler;
 
-public class PlayerInventory {
+public class PlayerInventory implements Listener {
 	
-	public enum ItemOption{DRAGABLE, GETABLE, FIXED};
-	
+	private boolean fixed;
 	private Inventory inventory;
-	private ItemOption itemoption;
 	private Player player;
-	private HashMap<ItemStack, InventoryClickAction> events = new HashMap<>();
+	private HashMap<Integer, InventoryClickAction> actions;
+	
+	private static ArrayList<PlayerInventory> inventories = new ArrayList<>();
+	private static PlayerInventory instance = new PlayerInventory();
 
-	public PlayerInventory(Player player, int number, String name) {
+	private PlayerInventory() {};
+	
+	public PlayerInventory(Player player, int height, String name) {
+		this.fixed = false;
 		this.player = player;
-		inventory = Bukkit.createInventory(player, number, name);
+		this.inventory = Bukkit.createInventory(player, height * 9, name);
+		this.actions = new HashMap<>();
 	}
 	
 	public void setItem(int slot, ItemStack itemStack, InventoryClickAction action) {
 		inventory.setItem(slot, itemStack);
-		events.put(itemStack, action);
+		actions.put(slot, action);
 	}
 	
 	public void setItem(int slot, ItemStack itemStack) {
 		inventory.setItem(slot, itemStack);
-	}
-	
-	public void setEvent(ItemStack itemStack, InventoryClickAction action) {
-		events.put(itemStack, action);
-	}
-	
-	public void onItemClicked(ItemStack itemStack) {
-		if(events.containsKey(itemStack)) {
-			events.get(itemStack).onAction(itemStack);
-		}
+		if (actions.containsKey(slot)) actions.remove(slot);
 	}
 	
 	public void open() {
 		player.openInventory(inventory);
-		InventoryHandler.addInventory(this);
+		inventories.add(this);
 	}
 	
 	public void close() {
 		player.closeInventory();
-		InventoryHandler.removeInventory(this);
+		inventories.remove(this);
 	}
 	
 	public void clear() {
+		actions.clear();
 		inventory.clear();
 	}
 	
-	public void setItemOption(ItemOption itemOption) {
-		this.itemoption = itemOption;
+	public void setFixed(boolean fixed) {
+		this.fixed = fixed;
 	}
 	
-	public ItemOption getItemOption() {
-		return itemoption;
+	public boolean isFixed() {
+		return fixed;
 	}
 	
-	public Inventory getInventory() {
-		return inventory;
+	@EventHandler
+	public static void onInventoryClicked(InventoryClickEvent event) {
+		try {
+			if(event.getCurrentItem() != null) {
+				for(PlayerInventory inventory : inventories) {
+					if (event.getClickedInventory() == inventory.inventory) {
+						if (inventory.actions.containsKey(event.getSlot())) inventory.actions.get(event.getSlot()).onAction(event);
+						if (inventory.isFixed()) event.setCancelled(true);
+						return;
+					} else if (inventory.isFixed() && event.getWhoClicked().getOpenInventory().getTopInventory() == inventory.inventory) {
+						event.setCancelled(true);
+						return;
+					}
+				}
+			}
+		} catch (ConcurrentModificationException exception) {}
+	}
+	
+	@EventHandler
+	public static void onInventoryClosed(InventoryCloseEvent event) {
+		for (PlayerInventory inventory : inventories) {
+			if (event.getInventory() == inventory.inventory) {
+				inventories.remove(inventory);
+				return;
+			}
+		}
+	}
+	
+	public static PlayerInventory getInstance() {
+		return instance;
 	}
 	
 }
