@@ -5,7 +5,12 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,11 +21,17 @@ import harrypotterplugin.actions.ItemInteractAction;
 import harrypotterplugin.actions.ItemLeftClickAction;
 import harrypotterplugin.actions.ItemRightClickAction;
 
-public class ExtendedItemStack extends ItemStack {
+public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	private ItemInteractAction interactAction;
 	private ItemLeftClickAction leftClickAction;
 	private ItemRightClickAction rightClickAction;
+	
+	private static ExtendedItemStack instance = new ExtendedItemStack();
+	private static ArrayList<NamespacedKey> namespacedKeys = new ArrayList<>();
+	private static ArrayList<ExtendedItemStack> extendedItemStacks = new ArrayList<>();
+	
+	private ExtendedItemStack() {}
 	
 	public ExtendedItemStack(String displayName, Material material, int customModelData) {
 		super(material);
@@ -130,6 +141,57 @@ public class ExtendedItemStack extends ItemStack {
 	
 	public ItemRightClickAction getOnRightClick() {
 		return rightClickAction;
+	}
+	
+	public static void registerItem(ExtendedItemStack item) {
+		extendedItemStacks.add(item);
+	}
+	
+	public static ArrayList<ExtendedItemStack> getItems() {
+		return extendedItemStacks;
+	}
+	
+	public static void registerNameSpaceKey(NamespacedKey namespacedKey) {
+		namespacedKeys.add(namespacedKey);
+	}
+	
+	public static ArrayList<NamespacedKey> getNamespacedKeys() {
+		return namespacedKeys;
+	}
+	
+	@EventHandler
+	public static void onPlayerInteract(PlayerInteractEvent event) {
+		ExtendedItemStack itemStack;																																						
+		if ((itemStack = getItem(event.getItem())) != null) {
+			System.out.println(itemStack instanceof ExtendedItemStack);
+			if (itemStack.getOnInteract() != null) itemStack.getOnInteract().onAction(event);
+			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+				if (itemStack.getOnLeftClick() != null) itemStack.getOnLeftClick().onAction(event);
+			} else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				if (itemStack.getOnRightClick() != null) itemStack.getOnRightClick().onAction(event);
+			}
+		}
+	}
+	
+	public static ExtendedItemStack getItem(ItemStack itemStack) {
+		for (ExtendedItemStack item : extendedItemStacks) {
+			if (itemStack != null && item.getType() == itemStack.getType() && itemStack.hasItemMeta() && itemStack.getItemMeta().hasCustomModelData() && item.getItemMeta().getCustomModelData() == itemStack.getItemMeta().getCustomModelData()) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
+	public static boolean isItem(ItemStack itemstack, Material material, int custommodeldata) {
+		if(itemstack != null && itemstack.getType() == material && itemstack.hasItemMeta() && itemstack.getItemMeta().hasCustomModelData() && itemstack.getItemMeta().getCustomModelData() == custommodeldata) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static ExtendedItemStack getInstance() {
+		return instance;
 	}
 	
 }

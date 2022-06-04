@@ -1,7 +1,6 @@
 package harrypotterplugin.events;
 
 import java.util.ArrayList;
-
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -16,14 +15,13 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-
-import harrypotterplugin.handler.ItemHandler;
+import harrypotterplugin.utilities.ExtendedItemStack;
 
 public class HarryPotterPluginListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		event.getPlayer().discoverRecipes(ItemHandler.getNamespacedKeys());
+		event.getPlayer().discoverRecipes(ExtendedItemStack.getNamespacedKeys());
 	}
 	
 	@EventHandler
@@ -46,7 +44,7 @@ public class HarryPotterPluginListener implements Listener {
 		if(event.getEntity() instanceof Player && event.getCause() == DamageCause.FALL && event.getDamage() != 0) {
 			ArrayList<ItemStack> brokenItems = new ArrayList<>();
 			for(ItemStack itemStack : ((Player)event.getEntity()).getInventory()) {
-				if(itemStack != null && ItemHandler.isItem(itemStack, Material.CARROT_ON_A_STICK, 22)) {
+				if(itemStack != null && ExtendedItemStack.isItem(itemStack, Material.CARROT_ON_A_STICK, 22)) {
 					double damage = event.getDamage();
 					if(itemStack.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
 						if(itemStack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 1) {
@@ -76,7 +74,7 @@ public class HarryPotterPluginListener implements Listener {
 	@EventHandler
 	public void onEntityDamage(EntityDamageByEntityEvent event) {
 		if(event.getCause() == DamageCause.ENTITY_ATTACK) {
-			if(event.getDamager() instanceof Player && ItemHandler.isItem(((Player)event.getDamager()).getInventory().getItemInMainHand(), Material.CARROT_ON_A_STICK, 1)) {
+			if(event.getDamager() instanceof Player && ExtendedItemStack.isItem(((Player)event.getDamager()).getInventory().getItemInMainHand(), Material.CARROT_ON_A_STICK, 1)) {
 				event.setCancelled(true);
 			}
 		}
@@ -85,7 +83,7 @@ public class HarryPotterPluginListener implements Listener {
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
-		if(ItemHandler.isItem(event.getPlayer().getInventory().getItemInMainHand(), Material.CARROT_ON_A_STICK, 1)) {
+		if(ExtendedItemStack.isItem(event.getPlayer().getInventory().getItemInMainHand(), Material.CARROT_ON_A_STICK, 1)) {
 			event.setCancelled(true);
 		}
 	}

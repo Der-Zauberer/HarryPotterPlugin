@@ -7,10 +7,10 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import harrypotterplugin.commands.ItemCommand;
 import harrypotterplugin.events.HarryPotterPluginListener;
-import harrypotterplugin.handler.ItemHandler;
 import harrypotterplugin.items.BroomstickItem;
 import harrypotterplugin.items.WandItem;
 import harrypotterplugin.items.BroomstickItem.BroomstickType;
+import harrypotterplugin.utilities.ExtendedItemStack;
 import harrypotterplugin.utilities.PlayerInventory;
 import harrypotterplugin.items.GoldenFeatherItem;
 import harrypotterplugin.items.MagicalAxeItem;
@@ -37,19 +37,19 @@ public class HarryPotterPlugin extends JavaPlugin {
 	private void registerEvents() {
 		Bukkit.getPluginManager().registerEvents(new HarryPotterPluginListener(), instance);
 		Bukkit.getPluginManager().registerEvents(PlayerInventory.getInstance(), instance);
-		Bukkit.getPluginManager().registerEvents(new ItemHandler(), instance);
+		Bukkit.getPluginManager().registerEvents(ExtendedItemStack.getInstance(), instance);
 	}
 	
 	private static void registerItem() {
-		ItemHandler.registerItem(new WandItem());
-		ItemHandler.registerItem(new BroomstickItem(BroomstickType.SHOOTING_STAR));
-		ItemHandler.registerItem(new BroomstickItem(BroomstickType.NIMBUS_2000));
-		ItemHandler.registerItem(new BroomstickItem(BroomstickType.NIMBUS_2001));
-		ItemHandler.registerItem(new BroomstickItem(BroomstickType.FIREBOLD));
-		ItemHandler.registerItem(new MagicalPickaxeItem());
-		ItemHandler.registerItem(new MagicalAxeItem());
-		ItemHandler.registerItem(new TimeTurnerItem());
-		ItemHandler.registerItem(new GoldenFeatherItem());
+		ExtendedItemStack.registerItem(new WandItem());
+		ExtendedItemStack.registerItem(new BroomstickItem(BroomstickType.SHOOTING_STAR));
+		ExtendedItemStack.registerItem(new BroomstickItem(BroomstickType.NIMBUS_2000));
+		ExtendedItemStack.registerItem(new BroomstickItem(BroomstickType.NIMBUS_2001));
+		ExtendedItemStack.registerItem(new BroomstickItem(BroomstickType.FIREBOLD));
+		ExtendedItemStack.registerItem(new MagicalPickaxeItem());
+		ExtendedItemStack.registerItem(new MagicalAxeItem());
+		ExtendedItemStack.registerItem(new TimeTurnerItem());
+		ExtendedItemStack.registerItem(new GoldenFeatherItem());
 	}
 	
 	private static void registerCraftingRecipes() {
@@ -65,7 +65,7 @@ public class HarryPotterPlugin extends JavaPlugin {
 	
 	public static NamespacedKey createNamespacedKey(String string) {
 		NamespacedKey namespacedKey = new NamespacedKey(instance, string);
-		ItemHandler.registerNameSpaceKey(namespacedKey);
+		ExtendedItemStack.registerNameSpaceKey(namespacedKey);
 		return namespacedKey;
 	}
 	
