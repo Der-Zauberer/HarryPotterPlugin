@@ -14,7 +14,7 @@ public class TimeTurnerItem extends ExtendedItemStack {
 	public TimeTurnerItem() {
 		super("Time-Turner", Material.CARROT_ON_A_STICK, 21);
 		setLore(ChatColor.GRAY + "Can set the time back");
-		setOnRightClick(event -> {
+		setRightClickAction(event -> {
 			if(!isInUse) {
 				isInUse = true;
 				taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), () -> {

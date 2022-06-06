@@ -13,8 +13,11 @@ import harrypotterplugin.items.BroomstickItem.BroomstickType;
 import harrypotterplugin.utilities.ExtendedItemStack;
 import harrypotterplugin.utilities.PlayerInventory;
 import harrypotterplugin.items.GoldenFeatherItem;
+import harrypotterplugin.items.HufflepuffsCupItem;
 import harrypotterplugin.items.MagicalAxeItem;
 import harrypotterplugin.items.MagicalPickaxeItem;
+import harrypotterplugin.items.RavenclawsDiadem;
+import harrypotterplugin.items.SwordOfGryffindorItem;
 import harrypotterplugin.items.TimeTurnerItem;
 
 public class HarryPotterPlugin extends JavaPlugin {
@@ -50,6 +53,9 @@ public class HarryPotterPlugin extends JavaPlugin {
 		ExtendedItemStack.registerItem(new MagicalAxeItem());
 		ExtendedItemStack.registerItem(new TimeTurnerItem());
 		ExtendedItemStack.registerItem(new GoldenFeatherItem());
+		ExtendedItemStack.registerItem(new SwordOfGryffindorItem());
+		ExtendedItemStack.registerItem(new HufflepuffsCupItem());
+		ExtendedItemStack.registerItem(new RavenclawsDiadem());
 	}
 	
 	private static void registerCraftingRecipes() {

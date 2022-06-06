@@ -8,7 +8,7 @@ public class WandItem extends ExtendedItemStack {
 	
 	public WandItem() {
 		super("Wand", Material.CARROT_ON_A_STICK, 1);
-		setOnLeftClick(event -> {
+		setLeftClickAction(event -> {
 			WitherSkull projectile = event.getPlayer().launchProjectile(WitherSkull.class);
 			projectile.setShooter(event.getPlayer());
 			projectile.setVelocity(event.getPlayer().getEyeLocation().getDirection().multiply(2));

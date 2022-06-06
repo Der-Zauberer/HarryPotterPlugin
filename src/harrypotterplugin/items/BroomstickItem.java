@@ -44,7 +44,7 @@ public class BroomstickItem extends ExtendedItemStack {
 		default:
 			break;
 		}
-		setOnInteract(event -> {
+		setInteractAction(event -> {
 			Player player = event.getPlayer();
 			ItemStack itemStack = event.getItem();
 			Action action = event.getAction();

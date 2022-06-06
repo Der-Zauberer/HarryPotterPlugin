@@ -18,14 +18,12 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import harrypotterplugin.actions.ItemInteractAction;
-import harrypotterplugin.actions.ItemLeftClickAction;
-import harrypotterplugin.actions.ItemRightClickAction;
 
 public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	private ItemInteractAction interactAction;
-	private ItemLeftClickAction leftClickAction;
-	private ItemRightClickAction rightClickAction;
+	private ItemInteractAction leftClickAction;
+	private ItemInteractAction rightClickAction;
 	
 	private static ExtendedItemStack instance = new ExtendedItemStack();
 	private static ArrayList<NamespacedKey> namespacedKeys = new ArrayList<>();
@@ -119,27 +117,27 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 		return this;
 	}
 	
-	public void setOnInteract(ItemInteractAction interactAction) {
+	public void setInteractAction(ItemInteractAction interactAction) {
 		this.interactAction = interactAction;
 	}
 	
-	public ItemInteractAction getOnInteract() {
+	public ItemInteractAction getInteractAction() {
 		return interactAction;
 	}
 	
-	public void setOnLeftClick(ItemLeftClickAction leftClickAction) {
+	public void setLeftClickAction(ItemInteractAction leftClickAction) {
 		this.leftClickAction = leftClickAction;
 	}
 	
-	public ItemLeftClickAction getOnLeftClick() {
+	public ItemInteractAction getLeftClickAction() {
 		return leftClickAction;
 	}
 	
-	public void setOnRightClick(ItemRightClickAction rightClickAction) {
+	public void setRightClickAction(ItemInteractAction rightClickAction) {
 		this.rightClickAction = rightClickAction;
 	}
 	
-	public ItemRightClickAction getOnRightClick() {
+	public ItemInteractAction getRightClickAction() {
 		return rightClickAction;
 	}
 	
@@ -149,6 +147,12 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	public static ArrayList<ExtendedItemStack> getItems() {
 		return extendedItemStacks;
+	}
+	
+	public static ArrayList<ItemStack> getItemsAsItemStack() {
+		ArrayList<ItemStack> itemStacks = new ArrayList<>();
+		extendedItemStacks.forEach(item -> itemStacks.add(item));
+		return itemStacks;
 	}
 	
 	public static void registerNameSpaceKey(NamespacedKey namespacedKey) {
@@ -164,11 +168,11 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 		ExtendedItemStack itemStack;																																						
 		if ((itemStack = getItem(event.getItem())) != null) {
 			System.out.println(itemStack instanceof ExtendedItemStack);
-			if (itemStack.getOnInteract() != null) itemStack.getOnInteract().onAction(event);
+			if (itemStack.getInteractAction() != null) itemStack.getInteractAction().onAction(event);
 			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-				if (itemStack.getOnLeftClick() != null) itemStack.getOnLeftClick().onAction(event);
+				if (itemStack.getLeftClickAction() != null) itemStack.getLeftClickAction().onAction(event);
 			} else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-				if (itemStack.getOnRightClick() != null) itemStack.getOnRightClick().onAction(event);
+				if (itemStack.getRightClickAction() != null) itemStack.getRightClickAction().onAction(event);
 			}
 		}
 	}
