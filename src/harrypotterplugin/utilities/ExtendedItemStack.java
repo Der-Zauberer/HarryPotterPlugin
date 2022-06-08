@@ -25,9 +25,9 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	private ItemInteractAction leftClickAction;
 	private ItemInteractAction rightClickAction;
 	
-	private static ExtendedItemStack instance = new ExtendedItemStack();
-	private static ArrayList<NamespacedKey> namespacedKeys = new ArrayList<>();
-	private static ArrayList<ExtendedItemStack> extendedItemStacks = new ArrayList<>();
+	private static final ExtendedItemStack instance = new ExtendedItemStack();
+	private static final ArrayList<NamespacedKey> namespacedKeys = new ArrayList<>();
+	private static final ArrayList<ExtendedItemStack> extendedItemStacks = new ArrayList<>();
 	
 	private ExtendedItemStack() {}
 	

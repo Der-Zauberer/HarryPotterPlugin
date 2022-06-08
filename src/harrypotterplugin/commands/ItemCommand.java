@@ -12,7 +12,7 @@ public class ItemCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender instanceof Player) {
-			PlayerInventory inventory = new PlayerInventory((Player) sender, 2, "Harry Potter Items");
+			final PlayerInventory inventory = new PlayerInventory((Player) sender, 2, "Harry Potter Items");
 			inventory.setFixed(true);
 			inventory.setItemList(ExtendedItemStack.getItemsAsItemStack(), event -> event.getWhoClicked().getInventory().addItem(event.getCurrentItem()));
 			inventory.open();

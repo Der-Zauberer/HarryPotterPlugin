@@ -42,7 +42,7 @@ public class HarryPotterPluginListener implements Listener {
 	@EventHandler
 	public void onDamage(EntityDamageEvent event) {
 		if(event.getEntity() instanceof Player && event.getCause() == DamageCause.FALL && event.getDamage() != 0) {
-			ArrayList<ItemStack> brokenItems = new ArrayList<>();
+			final ArrayList<ItemStack> brokenItems = new ArrayList<>();
 			for(ItemStack itemStack : ((Player)event.getEntity()).getInventory()) {
 				if(itemStack != null && ExtendedItemStack.isItem(itemStack, Material.CARROT_ON_A_STICK, 22)) {
 					double damage = event.getDamage();

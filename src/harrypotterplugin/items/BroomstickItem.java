@@ -15,9 +15,10 @@ import harrypotterplugin.utilities.ExtendedItemStack;
 public class BroomstickItem extends ExtendedItemStack {
 	
 	public enum BroomstickType {SHOOTING_STAR, NIMBUS_2000, NIMBUS_2001, FIREBOLD};
-	private static HashMap<Player, Integer> states = new HashMap<>();
-	private static HashMap<Player, Integer> tasks = new HashMap<>();
+	private static final HashMap<Player, Integer> states = new HashMap<>();
+	private static final HashMap<Player, Integer> tasks = new HashMap<>();
 
+	@SuppressWarnings("deprecation")
 	public BroomstickItem(BroomstickType type) {
 		super("Broomstick", Material.CARROT_ON_A_STICK, 0);
 		switch (type) {
@@ -45,9 +46,9 @@ public class BroomstickItem extends ExtendedItemStack {
 			break;
 		}
 		setInteractAction(event -> {
-			Player player = event.getPlayer();
-			ItemStack itemStack = event.getItem();
-			Action action = event.getAction();
+			final Player player = event.getPlayer();
+			final ItemStack itemStack = event.getItem();
+			final Action action = event.getAction();
 			if(states.get(player) == null) {
 				states.put(player, 0);
 			}
@@ -59,19 +60,15 @@ public class BroomstickItem extends ExtendedItemStack {
 					state = 2;
 				}
 				if(tasks.get(player) == null) {
-					int taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), new Runnable() {
-					    @SuppressWarnings("deprecation")
-						@Override
-					    public void run() {
-					    	if((!player.getInventory().getItemInMainHand().equals(itemStack) && !player.getInventory().getItemInOffHand().equals(itemStack)) || player.isOnGround()) {
-					    		player.removePotionEffect(PotionEffectType.LEVITATION);
-								player.removePotionEffect(PotionEffectType.SLOW_FALLING);
-								player.removePotionEffect(PotionEffectType.SPEED);
-					    		Bukkit.getScheduler().cancelTask(tasks.get(player));
-					    		tasks.remove(player);
-					    		states.remove(player);
-					    	}
-					    }
+					final int taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), () ->  {
+						if((!player.getInventory().getItemInMainHand().equals(itemStack) && !player.getInventory().getItemInOffHand().equals(itemStack)) || player.isOnGround()) {
+				    		player.removePotionEffect(PotionEffectType.LEVITATION);
+							player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+							player.removePotionEffect(PotionEffectType.SPEED);
+				    		Bukkit.getScheduler().cancelTask(tasks.get(player));
+				    		tasks.remove(player);
+				    		states.remove(player);
+				    	}
 					}, 10L, 5L);
 					tasks.put(player, taskid);
 				}

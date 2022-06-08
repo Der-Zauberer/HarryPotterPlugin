@@ -17,6 +17,7 @@ import harrypotterplugin.items.HufflepuffsCupItem;
 import harrypotterplugin.items.MagicalAxeItem;
 import harrypotterplugin.items.MagicalPickaxeItem;
 import harrypotterplugin.items.RavenclawsDiadem;
+import harrypotterplugin.items.SlytherinsLocket;
 import harrypotterplugin.items.SwordOfGryffindorItem;
 import harrypotterplugin.items.TimeTurnerItem;
 
@@ -37,7 +38,7 @@ public class HarryPotterPlugin extends JavaPlugin {
 		instance.getCommand("HarryPotterPlugin").setExecutor(new ItemCommand());
 	}
 	
-	private void registerEvents() {
+	private static void registerEvents() {
 		Bukkit.getPluginManager().registerEvents(new HarryPotterPluginListener(), instance);
 		Bukkit.getPluginManager().registerEvents(PlayerInventory.getInstance(), instance);
 		Bukkit.getPluginManager().registerEvents(ExtendedItemStack.getInstance(), instance);
@@ -56,6 +57,7 @@ public class HarryPotterPlugin extends JavaPlugin {
 		ExtendedItemStack.registerItem(new SwordOfGryffindorItem());
 		ExtendedItemStack.registerItem(new HufflepuffsCupItem());
 		ExtendedItemStack.registerItem(new RavenclawsDiadem());
+		ExtendedItemStack.registerItem(new SlytherinsLocket());
 	}
 	
 	private static void registerCraftingRecipes() {
