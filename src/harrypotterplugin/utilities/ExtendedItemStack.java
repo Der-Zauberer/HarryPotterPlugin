@@ -33,7 +33,7 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	public ExtendedItemStack(String displayName, Material material, int customModelData) {
 		super(material);
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.setDisplayName(ChatColor.RESET + displayName);
 		itemMeta.setCustomModelData(customModelData);
 		setItemMeta(itemMeta);
@@ -41,58 +41,58 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	public ExtendedItemStack(String displayName, Material material) {
 		super(material);
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.setDisplayName(ChatColor.RESET + displayName);
 		setItemMeta(itemMeta);
 	}
 	
 	public ExtendedItemStack setDisplayName(String displayName) {
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.setDisplayName(ChatColor.RESET + displayName);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
 	public ExtendedItemStack setCustomModelData(int customModelData) {
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.setCustomModelData(customModelData);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
 	public ExtendedItemStack setLore(String string) {
-		String[] list = string.split("\n");
-		List<String> lore = new ArrayList<>();
+		final String[] list = string.split("\n");
+		final List<String> lore = new ArrayList<>();
 		for (String line : list) lore.add(line);
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.setLore(lore);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
 	public ExtendedItemStack setLore(List<String> lore) {
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.setLore(lore);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
 	public ExtendedItemStack removeLore() {
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.setLore(new ArrayList<String>());
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
 	public ExtendedItemStack addItemFlag(ItemFlag flag) {
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.addItemFlags(flag);
 		setItemMeta(itemMeta);
 		return this;
 	}
 	
 	public ExtendedItemStack removeItemFlag(ItemFlag flag) {
-		ItemMeta itemMeta = getItemMeta();
+		final ItemMeta itemMeta = getItemMeta();
 		itemMeta.removeItemFlags(flag);
 		setItemMeta(itemMeta);
 		return this;
@@ -100,7 +100,7 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	public ExtendedItemStack addPotionMeta(Color color, PotionEffect effect) {
 		if(getType() == Material.POTION) {
-			PotionMeta potionMeta = (PotionMeta) getItemMeta();
+			final PotionMeta potionMeta = (PotionMeta) getItemMeta();
 			potionMeta.setColor(color);
 			potionMeta.addCustomEffect(effect, true);
 			setItemMeta(potionMeta);
@@ -110,7 +110,7 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	public ExtendedItemStack addPlayerSkullMeta(Player player) {
 		if(getType() == Material.PLAYER_HEAD) {
-			SkullMeta skullMeta = (SkullMeta) getItemMeta();
+			final SkullMeta skullMeta = (SkullMeta) getItemMeta();
 			skullMeta.setOwningPlayer(player);
 			setItemMeta(skullMeta);
 		}
@@ -165,9 +165,8 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	@EventHandler
 	public static void onPlayerInteract(PlayerInteractEvent event) {
-		ExtendedItemStack itemStack;																																						
+		final ExtendedItemStack itemStack;																																						
 		if ((itemStack = getItem(event.getItem())) != null) {
-			System.out.println(itemStack instanceof ExtendedItemStack);
 			if (itemStack.getInteractAction() != null) itemStack.getInteractAction().onAction(event);
 			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
 				if (itemStack.getLeftClickAction() != null) itemStack.getLeftClickAction().onAction(event);
