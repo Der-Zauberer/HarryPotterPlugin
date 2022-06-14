@@ -6,7 +6,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import harrypotterplugin.commands.ItemCommand;
-import harrypotterplugin.events.HarryPotterPluginListener;
 import harrypotterplugin.items.BroomstickItem;
 import harrypotterplugin.items.WandItem;
 import harrypotterplugin.items.BroomstickItem.BroomstickType;
@@ -39,7 +38,6 @@ public class HarryPotterPlugin extends JavaPlugin {
 	}
 	
 	private static void registerEvents() {
-		Bukkit.getPluginManager().registerEvents(new HarryPotterPluginListener(), instance);
 		Bukkit.getPluginManager().registerEvents(PlayerInventory.getInstance(), instance);
 		Bukkit.getPluginManager().registerEvents(ExtendedItemStack.getInstance(), instance);
 	}

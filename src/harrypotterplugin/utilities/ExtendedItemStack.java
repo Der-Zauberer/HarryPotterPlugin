@@ -2,15 +2,19 @@ package harrypotterplugin.utilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,6 +22,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import harrypotterplugin.actions.ItemInteractAction;
+import harrypotterplugin.main.HarryPotterPlugin;
 
 public class ExtendedItemStack extends ItemStack implements Listener {
 	
@@ -26,7 +31,7 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	private ItemInteractAction rightClickAction;
 	
 	private static final ExtendedItemStack instance = new ExtendedItemStack();
-	private static final ArrayList<NamespacedKey> namespacedKeys = new ArrayList<>();
+	private static final ArrayList<NamespacedKey> nameSpacedKeys = new ArrayList<>();
 	private static final ArrayList<ExtendedItemStack> extendedItemStacks = new ArrayList<>();
 	
 	private ExtendedItemStack() {}
@@ -141,8 +146,9 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 		return rightClickAction;
 	}
 	
-	public static void registerItem(ExtendedItemStack item) {
-		extendedItemStacks.add(item);
+	public static void registerItem(ExtendedItemStack itemStack) {
+		extendedItemStacks.add(itemStack);
+		if (itemStack instanceof Listener) Bukkit.getPluginManager().registerEvents(itemStack, HarryPotterPlugin.getInstance());
 	}
 	
 	public static ArrayList<ExtendedItemStack> getItems() {
@@ -155,12 +161,31 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 		return itemStacks;
 	}
 	
-	public static void registerNameSpaceKey(NamespacedKey namespacedKey) {
-		namespacedKeys.add(namespacedKey);
+	public static void registerNameSpaceKey(NamespacedKey nameSpacedKey) {
+		nameSpacedKeys.add(nameSpacedKey);
 	}
 	
 	public static ArrayList<NamespacedKey> getNamespacedKeys() {
-		return namespacedKeys;
+		return nameSpacedKeys;
+	}
+	
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		event.getPlayer().discoverRecipes(ExtendedItemStack.getNamespacedKeys());
+	}
+	
+	@EventHandler
+	public void onEntityTarget(EntityTargetEvent event) {
+		if(event.getEntityType() == EntityType.PIG && event.getTarget() instanceof Player) {
+			ItemStack mainItem = ((Player)event.getTarget()).getInventory().getItemInMainHand();
+			ItemStack secondaryItem = ((Player)event.getTarget()).getInventory().getItemInOffHand();
+			if(mainItem.getType() == Material.CARROT_ON_A_STICK && mainItem.hasItemMeta() && mainItem.getItemMeta().hasCustomModelData() && mainItem.getItemMeta().getCustomModelData() != 0) {
+				event.setCancelled(true);
+			} else if(secondaryItem.getType() == Material.CARROT_ON_A_STICK && secondaryItem.hasItemMeta() && secondaryItem.getItemMeta().hasCustomModelData() && secondaryItem.getItemMeta().getCustomModelData() != 0) {
+				event.setCancelled(true);
+			}
+		}
 	}
 	
 	@EventHandler
