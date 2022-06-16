@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
-import harrypotterplugin.commands.ItemCommand;
+import harrypotterplugin.commands.HarryPotterCommand;
 import harrypotterplugin.items.BroomstickItem;
 import harrypotterplugin.items.WandItem;
 import harrypotterplugin.items.BroomstickItem.BroomstickType;
@@ -34,7 +34,7 @@ public class HarryPotterPlugin extends JavaPlugin {
 	}
 
 	private static void registerCommands() {
-		instance.getCommand("HarryPotterPlugin").setExecutor(new ItemCommand());
+		instance.getCommand("HarryPotter").setExecutor(new HarryPotterCommand());
 	}
 	
 	private static void registerEvents() {
