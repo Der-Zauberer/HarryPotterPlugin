@@ -20,7 +20,7 @@ public class Spell {
 		this.mana = mana;
 	}
 	
-	public void cast(Player player) {
+	public void castSpell(Player player) {
 		if (spellCastAction != null) spellCastAction.onAction(player);
 	}
 	

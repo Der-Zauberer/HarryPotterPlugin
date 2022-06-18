@@ -2,7 +2,6 @@ package harrypotterplugin.items;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,8 +10,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import harrypotterplugin.main.HarryPotterPlugin;
+import harrypotterplugin.spells.StuporSpell;
 import harrypotterplugin.utilities.ExtendedItemStack;
-import harrypotterplugin.utilities.SpellProjectile;
 
 public class WandItem extends ExtendedItemStack implements Listener {
 	
@@ -23,23 +22,23 @@ public class WandItem extends ExtendedItemStack implements Listener {
 		registerEvents();
 		setLeftClickAction(event -> {
 			if (!cooldown) {
+				new StuporSpell().castSpell(event.getPlayer());
 				cooldown = true;
 				Bukkit.getScheduler().runTaskLater(HarryPotterPlugin.getInstance(), () -> cooldown = false, 10);
-				SpellProjectile spellProjectile = new SpellProjectile(1, 10, event.getPlayer().getEyeLocation(), event.getPlayer().getEyeLocation().getDirection());
-				spellProjectile.setHitEntityAction(entity -> {
-					if (entity instanceof LivingEntity) {
-						((LivingEntity)entity).damage(1000);
-					}
-				});
-				spellProjectile.setHitBlockAction(block -> {
-					System.out.println("Test2");
-				});
-				spellProjectile.setOutrangedAction(() -> {
-					System.out.println("Test");
-				});
-				spellProjectile.launch(event.getPlayer());
+//				SpellProjectile spellProjectile = new SpellProjectile(1, 10, event.getPlayer().getEyeLocation(), event.getPlayer().getEyeLocation().getDirection());
+//				spellProjectile.setHitEntityAction(entity -> {
+//					if (entity instanceof LivingEntity) {
+//						((LivingEntity)entity).damage(1000);
+//					}
+//				});
+//				spellProjectile.setHitBlockAction(block -> {
+//					System.out.println("Test2");
+//				});
+//				spellProjectile.setOutrangedAction(() -> {
+//					System.out.println("Test");
+//				});
+//				spellProjectile.launch(event.getPlayer());
 			}
-			
 		});
 	}
 	
