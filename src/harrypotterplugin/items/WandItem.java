@@ -20,6 +20,7 @@ public class WandItem extends ExtendedItemStack implements Listener {
 	
 	public WandItem() {
 		super("Wand", Material.CARROT_ON_A_STICK, 1);
+		registerEvents();
 		setLeftClickAction(event -> {
 			if (!cooldown) {
 				cooldown = true;

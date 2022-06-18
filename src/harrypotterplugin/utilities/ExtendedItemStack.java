@@ -24,17 +24,15 @@ import org.bukkit.potion.PotionEffect;
 import harrypotterplugin.actions.ItemInteractAction;
 import harrypotterplugin.main.HarryPotterPlugin;
 
-public class ExtendedItemStack extends ItemStack implements Listener {
+public class ExtendedItemStack extends ItemStack {
 	
 	private ItemInteractAction interactAction;
 	private ItemInteractAction leftClickAction;
 	private ItemInteractAction rightClickAction;
 	
-	private static final ExtendedItemStack instance = new ExtendedItemStack();
+	private static final ListenerClass listener = new ListenerClass();
 	private static final ArrayList<NamespacedKey> nameSpacedKeys = new ArrayList<>();
 	private static final ArrayList<ExtendedItemStack> extendedItemStacks = new ArrayList<>();
-	
-	private ExtendedItemStack() {}
 	
 	public ExtendedItemStack(String displayName, Material material, int customModelData) {
 		super(material);
@@ -122,6 +120,10 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 		return this;
 	}
 	
+	public void registerEvents() {
+		if (this instanceof Listener) Bukkit.getPluginManager().registerEvents((Listener) this, HarryPotterPlugin.getInstance());
+	}
+	
 	public void setInteractAction(ItemInteractAction interactAction) {
 		this.interactAction = interactAction;
 	}
@@ -148,7 +150,6 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 	
 	public static void registerItem(ExtendedItemStack itemStack) {
 		extendedItemStacks.add(itemStack);
-		if (itemStack instanceof Listener) Bukkit.getPluginManager().registerEvents(itemStack, HarryPotterPlugin.getInstance());
 	}
 	
 	public static ArrayList<ExtendedItemStack> getItems() {
@@ -169,38 +170,6 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 		return nameSpacedKeys;
 	}
 	
-	
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		event.getPlayer().discoverRecipes(ExtendedItemStack.getNamespacedKeys());
-	}
-	
-	@EventHandler
-	public void onEntityTarget(EntityTargetEvent event) {
-		if(event.getEntityType() == EntityType.PIG && event.getTarget() instanceof Player) {
-			ItemStack mainItem = ((Player)event.getTarget()).getInventory().getItemInMainHand();
-			ItemStack secondaryItem = ((Player)event.getTarget()).getInventory().getItemInOffHand();
-			if(mainItem.getType() == Material.CARROT_ON_A_STICK && mainItem.hasItemMeta() && mainItem.getItemMeta().hasCustomModelData() && mainItem.getItemMeta().getCustomModelData() != 0) {
-				event.setCancelled(true);
-			} else if(secondaryItem.getType() == Material.CARROT_ON_A_STICK && secondaryItem.hasItemMeta() && secondaryItem.getItemMeta().hasCustomModelData() && secondaryItem.getItemMeta().getCustomModelData() != 0) {
-				event.setCancelled(true);
-			}
-		}
-	}
-	
-	@EventHandler
-	public static void onPlayerInteract(PlayerInteractEvent event) {
-		final ExtendedItemStack itemStack;																																						
-		if ((itemStack = getItem(event.getItem())) != null) {
-			if (itemStack.getInteractAction() != null) itemStack.getInteractAction().onAction(event);
-			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-				if (itemStack.getLeftClickAction() != null) itemStack.getLeftClickAction().onAction(event);
-			} else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-				if (itemStack.getRightClickAction() != null) itemStack.getRightClickAction().onAction(event);
-			}
-		}
-	}
-	
 	public static ExtendedItemStack getItem(ItemStack itemStack) {
 		for (ExtendedItemStack item : extendedItemStacks) {
 			if (itemStack != null && item.getType() == itemStack.getType() && itemStack.hasItemMeta() && itemStack.getItemMeta().hasCustomModelData() && item.getItemMeta().getCustomModelData() == itemStack.getItemMeta().getCustomModelData()) {
@@ -214,8 +183,43 @@ public class ExtendedItemStack extends ItemStack implements Listener {
 		return itemStack != null && itemStack.getType() == material && itemStack.hasItemMeta() && itemStack.getItemMeta().hasCustomModelData() && itemStack.getItemMeta().getCustomModelData() == customModelData;
 	}
 	
-	public static ExtendedItemStack getInstance() {
-		return instance;
+	public static ListenerClass getListener() {
+		return listener;
+	}
+	
+	private static class ListenerClass implements Listener {
+		
+		@EventHandler
+		public static void onPlayerJoin(PlayerJoinEvent event) {
+			event.getPlayer().discoverRecipes(ExtendedItemStack.getNamespacedKeys());
+		}
+		
+		@EventHandler
+		public static void onEntityTarget(EntityTargetEvent event) {
+			if(event.getEntityType() == EntityType.PIG && event.getTarget() instanceof Player) {
+				ItemStack mainItem = ((Player)event.getTarget()).getInventory().getItemInMainHand();
+				ItemStack secondaryItem = ((Player)event.getTarget()).getInventory().getItemInOffHand();
+				if(mainItem.getType() == Material.CARROT_ON_A_STICK && mainItem.hasItemMeta() && mainItem.getItemMeta().hasCustomModelData() && mainItem.getItemMeta().getCustomModelData() != 0) {
+					event.setCancelled(true);
+				} else if(secondaryItem.getType() == Material.CARROT_ON_A_STICK && secondaryItem.hasItemMeta() && secondaryItem.getItemMeta().hasCustomModelData() && secondaryItem.getItemMeta().getCustomModelData() != 0) {
+					event.setCancelled(true);
+				}
+			}
+		}
+		
+		@EventHandler
+		public static void onPlayerInteract(PlayerInteractEvent event) {
+			final ExtendedItemStack itemStack;																																						
+			if ((itemStack = getItem(event.getItem())) != null) {
+				if (itemStack.getInteractAction() != null) itemStack.getInteractAction().onAction(event);
+				if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+					if (itemStack.getLeftClickAction() != null) itemStack.getLeftClickAction().onAction(event);
+				} else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+					if (itemStack.getRightClickAction() != null) itemStack.getRightClickAction().onAction(event);
+				}
+			}
+		}
+		
 	}
 	
 }

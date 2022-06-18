@@ -16,7 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import harrypotterplugin.actions.InventoryClickAction;
 
-public class PlayerInventory implements Listener {
+public class PlayerInventory {
 	
 	private boolean fixed;
 	private int height;
@@ -24,10 +24,8 @@ public class PlayerInventory implements Listener {
 	private Player player;
 	private HashMap<Integer, InventoryClickAction> actions;
 	
-	private static PlayerInventory instance = new PlayerInventory();
+	private static ListenerClass listener = new ListenerClass();
 	private static ArrayList<PlayerInventory> inventories = new ArrayList<>();
-
-	private PlayerInventory() {};
 	
 	public PlayerInventory(Player player, int height, String name) {
 		this.fixed = false;
@@ -118,36 +116,40 @@ public class PlayerInventory implements Listener {
 		return actions.get(slot);
 	}
 	
-	@EventHandler
-	public static void onInventoryClicked(InventoryClickEvent event) {
-		try {
-			if(event.getCurrentItem() != null) {
-				for(PlayerInventory inventory : inventories) {
-					if (event.getClickedInventory() == inventory.inventory) {
-						if (inventory.actions.containsKey(event.getSlot())) inventory.actions.get(event.getSlot()).onAction(event);
-						if (inventory.isFixed()) event.setCancelled(true);
-						return;
-					} else if (inventory.isFixed() && event.getWhoClicked().getOpenInventory().getTopInventory() == inventory.inventory) {
-						event.setCancelled(true);
-						return;
+	public static ListenerClass getListener() {
+		return listener;
+	}
+	
+	private static class ListenerClass implements Listener {
+		
+		@EventHandler
+		public static void onInventoryClicked(InventoryClickEvent event) {
+			try {
+				if(event.getCurrentItem() != null) {
+					for(PlayerInventory inventory : inventories) {
+						if (event.getClickedInventory() == inventory.inventory) {
+							if (inventory.actions.containsKey(event.getSlot())) inventory.actions.get(event.getSlot()).onAction(event);
+							if (inventory.isFixed()) event.setCancelled(true);
+							return;
+						} else if (inventory.isFixed() && event.getWhoClicked().getOpenInventory().getTopInventory() == inventory.inventory) {
+							event.setCancelled(true);
+							return;
+						}
 					}
 				}
-			}
-		} catch (ConcurrentModificationException exception) {}
-	}
-	
-	@EventHandler
-	public static void onInventoryClosed(InventoryCloseEvent event) {
-		for (PlayerInventory inventory : inventories) {
-			if (event.getInventory() == inventory.inventory) {
-				inventories.remove(inventory);
-				return;
+			} catch (ConcurrentModificationException exception) {}
+		}
+		
+		@EventHandler
+		public static void onInventoryClosed(InventoryCloseEvent event) {
+			for (PlayerInventory inventory : inventories) {
+				if (event.getInventory() == inventory.inventory) {
+					inventories.remove(inventory);
+					return;
+				}
 			}
 		}
-	}
-	
-	public static PlayerInventory getInstance() {
-		return instance;
+		
 	}
 	
 }

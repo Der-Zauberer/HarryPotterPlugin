@@ -38,8 +38,8 @@ public class HarryPotterPlugin extends JavaPlugin {
 	}
 	
 	private static void registerEvents() {
-		Bukkit.getPluginManager().registerEvents(PlayerInventory.getInstance(), instance);
-		Bukkit.getPluginManager().registerEvents(ExtendedItemStack.getInstance(), instance);
+		Bukkit.getPluginManager().registerEvents(PlayerInventory.getListener(), instance);
+		Bukkit.getPluginManager().registerEvents(ExtendedItemStack.getListener(), instance);
 	}
 	
 	private static void registerItem() {
