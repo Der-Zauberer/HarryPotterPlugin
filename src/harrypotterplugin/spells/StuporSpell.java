@@ -7,12 +7,14 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import harrypotterplugin.utilities.Spell;
 import harrypotterplugin.utilities.SpellProjectile;
 
+import java.util.Objects;
+
 public class StuporSpell extends Spell {
 
 	public StuporSpell() {
 		super("Stupor", SpellType.CHARM, 2);
 		setSpellCastAction(event -> {
-			SpellProjectile spellProjectile = new SpellProjectile(1, 40, event.getPlayer().getEyeLocation(), event.getPlayer().getEyeLocation().getDirection());
+			SpellProjectile spellProjectile = new SpellProjectile(1, 40, Objects.requireNonNull(event.getPlayer()).getEyeLocation(), event.getPlayer().getEyeLocation().getDirection());
 			spellProjectile.setHitEntityAction(entity -> {
 				if (entity instanceof LivingEntity) {
 					((LivingEntity) entity).damage(4);

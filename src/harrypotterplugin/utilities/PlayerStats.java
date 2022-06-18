@@ -1,16 +1,21 @@
 package harrypotterplugin.utilities;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+
 public class PlayerStats {
 	
 	private final Player player;
+	@Getter
+	@Setter
 	private int mana;
 	
 	private static final HashMap<Player, PlayerStats> players = new HashMap<>();
@@ -24,14 +29,6 @@ public class PlayerStats {
 	
 	public Player getPlayer() {
 		return player;
-	}
-	
-	public void setMana(int mana) {
-		this.mana = mana;
-	}
-	
-	public int getMana() {
-		return mana;
 	}
 	
 	public static void join(Player player) {

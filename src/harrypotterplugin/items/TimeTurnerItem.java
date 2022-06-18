@@ -9,7 +9,7 @@ import harrypotterplugin.utilities.ExtendedItemStack;
 public class TimeTurnerItem extends ExtendedItemStack {
 	
 	private static boolean isInUse = false;
-	private int taskid = 0;
+	private int taskId = 0;
 
 	public TimeTurnerItem() {
 		super("Time-Turner", Material.CARROT_ON_A_STICK, 21);
@@ -17,7 +17,7 @@ public class TimeTurnerItem extends ExtendedItemStack {
 		setRightClickAction(event -> {
 			if(!isInUse) {
 				isInUse = true;
-				taskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), () -> {
+				taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), () -> {
 					if(isInUse) {
 			    		if(event.getPlayer().getWorld().getTime() > 60) {
 			    			event.getPlayer().getWorld().setTime(event.getPlayer().getWorld().getTime() - 60);
@@ -25,7 +25,7 @@ public class TimeTurnerItem extends ExtendedItemStack {
 				        	event.getPlayer().getWorld().setTime(23900);
 				        }
 			    	} else {
-			    		Bukkit.getScheduler().cancelTask(taskid);
+			    		Bukkit.getScheduler().cancelTask(taskId);
 			    	}
 				}, 0L, 1L);
 			} else {

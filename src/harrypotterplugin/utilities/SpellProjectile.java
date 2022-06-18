@@ -1,6 +1,8 @@
 package harrypotterplugin.utilities;
 
 import java.util.Collection;
+import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,16 +17,16 @@ import harrypotterplugin.main.HarryPotterPlugin;
 
 public class SpellProjectile {
 	
-	private int scedulerId;
+	private int schedulerId;
 	private int counter;
 	private boolean alive;
 	private final int speed;
 	private final int distance;
 	private Location location;
-	private Vector vector;
+	private final Vector vector;
 	private SpellProjectileHitBlockAction hitBlockAction;
 	private SpellProjectileHitEntityAction hitEntityAction;
-	private Runnable outrangedAction;
+	private Runnable outRangedAction;
 	
 	public SpellProjectile(int speed, int distance, Location location, Vector vector) {
 		counter = 0;
@@ -41,13 +43,14 @@ public class SpellProjectile {
 	
 	public void launch(Player player) {
 		alive = true;
-		scedulerId = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), () -> {
+		schedulerId = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), () -> {
 			if (alive) {
+				if(location.getWorld() == null) return;
 				location.getWorld().spawnParticle(Particle.HEART, location, 2);
 				location = location.add(vector);
 				counter++;
 				Block block = location.getBlock();
-				Collection<Entity> entities = location.getWorld().getNearbyEntities(location, 0.1, 0.1, 0.1);
+				Collection<Entity> entities = Objects.requireNonNull(location.getWorld()).getNearbyEntities(location, 0.1, 0.1, 0.1);
 				if (block.getType() != Material.AIR) {
 					kill();
 					if (hitBlockAction != null) hitBlockAction.onAction(block);
@@ -60,7 +63,7 @@ public class SpellProjectile {
 					}
 				} else if (counter > distance) {
 					kill();
-					if (outrangedAction != null) outrangedAction.run();
+					if (outRangedAction != null) outRangedAction.run();
 				}
 			}
 		}, 2, speed);
@@ -68,7 +71,7 @@ public class SpellProjectile {
 	
 	public void kill() {
 		alive = false;
-		Bukkit.getScheduler().cancelTask(scedulerId);
+		Bukkit.getScheduler().cancelTask(schedulerId);
 	}
 	
 	public boolean isAlive() {
@@ -103,12 +106,12 @@ public class SpellProjectile {
 		return hitBlockAction;
 	}
 	
-	public void setOutrangedAction(Runnable outrangedAction) {
-		this.outrangedAction = outrangedAction;
+	public void setOutRangedAction(Runnable outRangedAction) {
+		this.outRangedAction = outRangedAction;
 	}
 	
-	public Runnable getOutrangedAction() {
-		return outrangedAction;
+	public Runnable getOutRangedAction() {
+		return outRangedAction;
 	}
 
 }
