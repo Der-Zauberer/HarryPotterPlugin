@@ -30,7 +30,8 @@ public class GoldenFeatherItem extends ExtendedItemStack implements Listener {
             for (ItemStack itemStack : ((Player) event.getEntity()).getInventory()) {
                 if (ExtendedItemStack.isItem(itemStack, Material.CARROT_ON_A_STICK, 22)) {
                     double damage = event.getDamage();
-                    if (Objects.requireNonNull(itemStack.getItemMeta()).hasEnchant(Enchantment.DURABILITY)) {
+                    if(itemStack.getItemMeta() == null) return;
+                    if (itemStack.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
                         if (itemStack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 1) {
                             damage = damage / 1.5;
                         } else if (itemStack.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) == 2) {

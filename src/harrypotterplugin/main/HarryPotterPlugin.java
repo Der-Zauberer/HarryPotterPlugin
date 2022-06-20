@@ -3,6 +3,7 @@ package harrypotterplugin.main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import harrypotterplugin.commands.HarryPotterCommand;
@@ -36,7 +37,8 @@ public class HarryPotterPlugin extends JavaPlugin {
     }
 
     private static void registerCommands() {
-        Objects.requireNonNull(instance.getCommand("HarryPotter")).setExecutor(new HarryPotterCommand());
+        PluginCommand harryPotterCommand = instance.getCommand("HarryPotter");
+        if (harryPotterCommand != null) harryPotterCommand.setExecutor(new HarryPotterCommand());
     }
 
     private static void registerEvents() {

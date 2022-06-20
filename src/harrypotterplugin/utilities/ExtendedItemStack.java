@@ -181,7 +181,7 @@ public class ExtendedItemStack extends ItemStack {
 
     public static ExtendedItemStack getItem(ItemStack itemStack) {
         for (ExtendedItemStack item : extendedItemStacks) {
-            if (itemStack != null && item.getType() == itemStack.getType() && itemStack.hasItemMeta() && Objects.requireNonNull(itemStack.getItemMeta()).hasCustomModelData() && Objects.requireNonNull(item.getItemMeta()).getCustomModelData() == itemStack.getItemMeta().getCustomModelData()) {
+            if (itemStack != null && item.getType() == itemStack.getType() && itemStack.hasItemMeta() && itemStack.getItemMeta() != null && itemStack.getItemMeta().hasCustomModelData() && Objects.requireNonNull(item.getItemMeta()).getCustomModelData() == itemStack.getItemMeta().getCustomModelData()) {
                 return item;
             }
         }
@@ -189,7 +189,7 @@ public class ExtendedItemStack extends ItemStack {
     }
 
     public static boolean isItem(ItemStack itemStack, Material material, int customModelData) {
-        return itemStack != null && itemStack.getType() == material && itemStack.hasItemMeta() && Objects.requireNonNull(itemStack.getItemMeta()).hasCustomModelData() && itemStack.getItemMeta().getCustomModelData() == customModelData;
+        return itemStack != null && itemStack.getType() == material && itemStack.hasItemMeta() && itemStack.getItemMeta() != null && itemStack.getItemMeta().hasCustomModelData() && itemStack.getItemMeta().getCustomModelData() == customModelData;
     }
 
     public static ListenerClass getListener() {
@@ -208,7 +208,7 @@ public class ExtendedItemStack extends ItemStack {
             if (event.getEntityType() == EntityType.PIG && event.getTarget() instanceof Player) {
                 ItemStack mainItem = ((Player) event.getTarget()).getInventory().getItemInMainHand();
                 ItemStack secondaryItem = ((Player) event.getTarget()).getInventory().getItemInOffHand();
-                if (mainItem.getType() == Material.CARROT_ON_A_STICK && mainItem.hasItemMeta() && Objects.requireNonNull(mainItem.getItemMeta()).hasCustomModelData() && mainItem.getItemMeta().getCustomModelData() != 0) {
+                if (mainItem.getType() == Material.CARROT_ON_A_STICK && mainItem.hasItemMeta() && mainItem.getItemMeta() != null && mainItem.getItemMeta().hasCustomModelData() && mainItem.getItemMeta().getCustomModelData() != 0) {
                     event.setCancelled(true);
                 } else if (secondaryItem.getType() == Material.CARROT_ON_A_STICK && secondaryItem.hasItemMeta() && Objects.requireNonNull(secondaryItem.getItemMeta()).hasCustomModelData() && secondaryItem.getItemMeta().getCustomModelData() != 0) {
                     event.setCancelled(true);

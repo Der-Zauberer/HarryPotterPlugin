@@ -47,8 +47,9 @@ public class BroomStickItem extends ExtendedItemStack {
         setInteractAction(event -> {
             final Player player = event.getPlayer();
             final ItemStack itemStack = event.getItem();
-            assert itemStack != null;
-            final BroomstickType broomstickType = BroomStickItem.getBroomstickType(Objects.requireNonNull(itemStack.getItemMeta()).getCustomModelData());
+            if(itemStack == null) return;
+            if(itemStack.getItemMeta() == null) return;
+            final BroomstickType broomstickType = BroomStickItem.getBroomstickType(itemStack.getItemMeta().getCustomModelData());
             final Action action = event.getAction();
             states.putIfAbsent(player, 0);
             int state = states.get(player);
