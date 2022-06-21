@@ -4,6 +4,6 @@ import org.bukkit.entity.Player;
 
 public interface SpellCastAction {
 	
-	public abstract void onAction(Player player);
+	void onAction(Player player);
 
 }

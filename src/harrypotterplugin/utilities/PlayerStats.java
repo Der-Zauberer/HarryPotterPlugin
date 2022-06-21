@@ -1,12 +1,12 @@
 package harrypotterplugin.utilities;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 
 public class PlayerStats {
 	
