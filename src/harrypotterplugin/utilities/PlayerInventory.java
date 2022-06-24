@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,7 +14,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import harrypotterplugin.actions.InventoryClickAction;
 
 public class PlayerInventory {
 
@@ -22,7 +21,7 @@ public class PlayerInventory {
     private final int height;
     private final Inventory inventory;
     private final Player player;
-    private final HashMap<Integer, InventoryClickAction> actions;
+    private final HashMap<Integer, Consumer<InventoryClickEvent>> actions;
 
     private static final ListenerClass listener = new ListenerClass();
     private static final ArrayList<PlayerInventory> inventories = new ArrayList<>();
@@ -35,7 +34,7 @@ public class PlayerInventory {
         this.actions = new HashMap<>();
     }
 
-    public PlayerInventory setItem(int slot, ItemStack itemStack, InventoryClickAction action) {
+    public PlayerInventory setItem(int slot, ItemStack itemStack, Consumer<InventoryClickEvent> action) {
         inventory.setItem(slot, itemStack);
         actions.put(slot, action);
         return this;
@@ -47,16 +46,16 @@ public class PlayerInventory {
         return this;
     }
 
-    public PlayerInventory setItemList(List<ItemStack> items, InventoryClickAction action) {
+    public PlayerInventory setItemList(List<ItemStack> items, Consumer<InventoryClickEvent> action) {
         return setItemList(items, action, null);
     }
 
-    public PlayerInventory setItemList(List<ItemStack> items, InventoryClickAction action, InventoryClickAction backAction) {
+    public PlayerInventory setItemList(List<ItemStack> items, Consumer<InventoryClickEvent> action, Consumer<InventoryClickEvent> backAction) {
         fillList(items, action, 0, backAction);
         return this;
     }
 
-    private void fillList(List<ItemStack> items, InventoryClickAction action, int position, InventoryClickAction backAction) {
+    private void fillList(List<ItemStack> items, Consumer<InventoryClickEvent> action, int position, Consumer<InventoryClickEvent> backAction) {
         clear();
         for (int i = 0; i < inventory.getSize() - 9 && i + position < items.size(); i++) {
             setItem(i, items.get(i + position), action);
@@ -107,12 +106,12 @@ public class PlayerInventory {
         return height;
     }
 
-    public PlayerInventory setInventoryClickAction(int slot, InventoryClickAction action) {
+    public PlayerInventory setInventoryClickAction(int slot, Consumer<InventoryClickEvent> action) {
         actions.put(slot, action);
         return this;
     }
 
-    public InventoryClickAction getInventoryClickAction(int slot) {
+    public Consumer<InventoryClickEvent> getInventoryClickAction(int slot) {
         return actions.get(slot);
     }
 
@@ -127,12 +126,12 @@ public class PlayerInventory {
             try {
                 if (event.getCurrentItem() == null) return;
                 for (PlayerInventory inventory : inventories) {
-                    if (event.getClickedInventory() == inventory.inventory) {
+                    if (event.getClickedInventory().equals(inventory.inventory)) {
                         if (inventory.actions.containsKey(event.getSlot()))
-                            inventory.actions.get(event.getSlot()).onAction(event);
+                            inventory.actions.get(event.getSlot()).accept(event);
                         if (inventory.isFixed()) event.setCancelled(true);
                         return;
-                    } else if (inventory.isFixed() && event.getWhoClicked().getOpenInventory().getTopInventory() == inventory.inventory) {
+                    } else if (inventory.isFixed() && event.getWhoClicked().getOpenInventory().getTopInventory().equals(inventory.inventory)) {
                         event.setCancelled(true);
                         return;
                     }

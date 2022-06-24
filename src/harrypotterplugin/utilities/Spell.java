@@ -1,8 +1,9 @@
 package harrypotterplugin.utilities;
 
+import java.util.function.Consumer;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import harrypotterplugin.actions.SpellCastAction;
 
 public class Spell {
 
@@ -11,7 +12,7 @@ public class Spell {
     private final String name;
     private final SpellType type;
     private final int mana;
-    private SpellCastAction spellCastAction;
+    private Consumer<Player> spellCastAction;
 
     public Spell(String name, SpellType type, int mana) {
         this.name = name;
@@ -20,7 +21,7 @@ public class Spell {
     }
 
     public void castSpell(Player player) {
-        if (spellCastAction != null) spellCastAction.onAction(player);
+        if (spellCastAction != null) spellCastAction.accept(player);
     }
 
     public ExtendedItemStack getSpellBook() {
@@ -34,13 +35,13 @@ public class Spell {
     public int getMana() {
 		return mana;
 	}
-
-    public void setSpellCastAction(SpellCastAction spellCastAction) {
-        this.spellCastAction = spellCastAction;
-    }
-
-    public SpellCastAction getSpellCastAction() {
-        return spellCastAction;
-    }
+    
+    public void setSpellCastAction(Consumer<Player> spellCastAction) {
+		this.spellCastAction = spellCastAction;
+	}
+    
+    public Consumer<Player> getSpellCastAction() {
+		return spellCastAction;
+	}
 
 }

@@ -1,6 +1,5 @@
 package harrypotterplugin.utilities;
 
-import harrypotterplugin.actions.ItemInteractAction;
 import harrypotterplugin.main.HarryPotterPlugin;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -17,17 +16,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class ExtendedItemStack extends ItemStack {
 
-    private ItemInteractAction interactAction;
-    private ItemInteractAction leftClickAction;
-    private ItemInteractAction rightClickAction;
+    private Consumer<PlayerInteractEvent> interactAction;
+    private Consumer<PlayerInteractEvent> leftClickAction;
+    private Consumer<PlayerInteractEvent> rightClickAction;
 
     private static final ListenerClass listener = new ListenerClass();
     private static final ArrayList<NamespacedKey> nameSpacedKeys = new ArrayList<>();
@@ -135,29 +134,29 @@ public class ExtendedItemStack extends ItemStack {
             Bukkit.getPluginManager().registerEvents((Listener) this, HarryPotterPlugin.getInstance());
     }
 
-    public void setInteractAction(ItemInteractAction interactAction) {
-        this.interactAction = interactAction;
-    }
-
-    public ItemInteractAction getInteractAction() {
-        return interactAction;
-    }
-
-    public void setLeftClickAction(ItemInteractAction leftClickAction) {
-        this.leftClickAction = leftClickAction;
-    }
-
-    public ItemInteractAction getLeftClickAction() {
-        return leftClickAction;
-    }
-
-    public void setRightClickAction(ItemInteractAction rightClickAction) {
-        this.rightClickAction = rightClickAction;
-    }
-
-    public ItemInteractAction getRightClickAction() {
-        return rightClickAction;
-    }
+    public void setInteractAction(Consumer<PlayerInteractEvent> interactAction) {
+		this.interactAction = interactAction;
+	}
+    
+    public Consumer<PlayerInteractEvent> getInteractAction() {
+		return interactAction;
+	}
+    
+    public void setLeftClickAction(Consumer<PlayerInteractEvent> leftClickAction) {
+		this.leftClickAction = leftClickAction;
+	}
+    
+    public Consumer<PlayerInteractEvent> getLeftClickAction() {
+		return leftClickAction;
+	}
+    
+    public void setRightClickAction(Consumer<PlayerInteractEvent> rightClickAction) {
+		this.rightClickAction = rightClickAction;
+	}
+    
+    public Consumer<PlayerInteractEvent> getRightClickAction() {
+		return rightClickAction;
+	}
 
     public static void registerItem(ExtendedItemStack itemStack) {
         extendedItemStacks.add(itemStack);
@@ -220,11 +219,11 @@ public class ExtendedItemStack extends ItemStack {
         public static void onPlayerInteract(PlayerInteractEvent event) {
             final ExtendedItemStack itemStack;
             if ((itemStack = getItem(event.getItem())) != null) {
-                if (itemStack.getInteractAction() != null) itemStack.getInteractAction().onAction(event);
+                if (itemStack.getInteractAction() != null) itemStack.getInteractAction().accept(event);
                 if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                    if (itemStack.getLeftClickAction() != null) itemStack.getLeftClickAction().onAction(event);
+                    if (itemStack.getLeftClickAction() != null) itemStack.getLeftClickAction().accept(event);
                 } else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                    if (itemStack.getRightClickAction() != null) itemStack.getRightClickAction().onAction(event);
+                    if (itemStack.getRightClickAction() != null) itemStack.getRightClickAction().accept(event);
                 }
             }
         }
