@@ -3,7 +3,6 @@ package harrypotterplugin.items;
 import harrypotterplugin.main.HarryPotterPlugin;
 import harrypotterplugin.utilities.ExtendedItemStack;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -15,7 +14,10 @@ import java.util.HashMap;
 public class BroomStickItem extends ExtendedItemStack {
 
     public enum BroomstickType {
-        SHOOTING_STAR("Shooting Star", ChatColor.GRAY + "Produced by Universal Brooms Ltd in 1955", 11, 0, 1, 5), NIMBUS_2000("Nimbus 2000", ChatColor.GRAY + "Produced by Nimbus Racing Broom Company in 1991", 12, 10, 2, 3), NIMBUS_2001("Nimbus 2001", ChatColor.GRAY + "Produced by Nimbus Racing Broom Company in 1992", 13, 20, 3, 2), FIREBOLD("Firebold", ChatColor.GRAY + "Produced by Randolph Spudmore in 1993", 14, 40, 5, 1);
+        SHOOTING_STAR("Shooting Star", "Produced by Universal Brooms Ltd in 1955", 11, 0, 1, 5), 
+        NIMBUS_2000("Nimbus 2000", "Produced by Nimbus Racing Broom Company in 1991", 12, 10, 2, 3), 
+        NIMBUS_2001("Nimbus 2001", "Produced by Nimbus Racing Broom Company in 1992", 13, 20, 3, 2), 
+        FIREBOLD("Firebold", "Produced by Randolph Spudmore in 1993", 14, 40, 5, 1);
 
         private final String displayName;
         private final String lore;

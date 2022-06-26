@@ -1,7 +1,6 @@
 package harrypotterplugin.items;
 
 import harrypotterplugin.utilities.ExtendedItemStack;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -16,7 +15,7 @@ public class GoldenFeatherItem extends ExtendedItemStack implements Listener {
 
     public GoldenFeatherItem() {
         super("Golden Feather", Material.CARROT_ON_A_STICK, 22);
-        setLore(ChatColor.GRAY + "Protects you from fall damage with the power of \"arresto momentum\"");
+        setLore("Protects you from fall damage with the power of \"arresto momentum\"");
         registerEvents();
     }
 

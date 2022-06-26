@@ -1,7 +1,6 @@
 package harrypotterplugin.items;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import harrypotterplugin.main.HarryPotterPlugin;
 import harrypotterplugin.utilities.ExtendedItemStack;
@@ -13,7 +12,7 @@ public class TimeTurnerItem extends ExtendedItemStack {
 
 	public TimeTurnerItem() {
 		super("Time-Turner", Material.CARROT_ON_A_STICK, 21);
-		setLore(ChatColor.GRAY + "Can set the time back");
+		setLore("Lets you travel back in time");
 		setRightClickAction(event -> {
 			if(!isInUse) {
 				isInUse = true;
