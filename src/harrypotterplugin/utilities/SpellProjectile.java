@@ -1,6 +1,7 @@
 package harrypotterplugin.utilities;
 
 import java.util.Collection;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,44 +20,51 @@ public class SpellProjectile {
     private boolean alive;
     private final int speed;
     private final int distance;
-    private Location location;
-    private final Vector vector;
+    private final boolean stopOnHitEntity;
+    private final Particle particle;
     private Consumer<Block> hitBlockAction;
-    private Consumer<Entity> hitEntityAction;
+    private BiConsumer<Player, Entity> hitEntityAction;
     private Runnable outRangedAction;
+    
+    private Location location;
+    private Vector vector;
 
-    public SpellProjectile(int speed, int distance, Location location, Vector vector) {
+    public SpellProjectile(int speed, int distance, boolean stopOnHitEntity, Particle particle) {
         counter = 0;
         alive = false;
         this.speed = speed;
         this.distance = distance;
-        this.location = location;
-        this.vector = vector;
-    }
-
-    public void launch() {
-        launch(null);
+        this.stopOnHitEntity = stopOnHitEntity;
+        this.particle = particle;
     }
 
     public void launch(Player player) {
+        launch(player, player.getLocation(), player.getLocation().getDirection());
+    }
+
+    public void launch(Player player, Location location, Vector vector) {
+    	this.location = location;
+    	this.vector = vector;
+    	if (this.location == null) this.location = player.getLocation();
+    	if (this.vector == null) this.vector = player.getLocation().getDirection();
         alive = true;
         schedulerId = Bukkit.getScheduler().scheduleSyncRepeatingTask(HarryPotterPlugin.getInstance(), () -> {
             if (alive) {
-                if (location.getWorld() == null) return;
-                location.getWorld().spawnParticle(Particle.HEART, location, 2);
-                location = location.add(vector);
+                if (this.location.getWorld() == null) return;
+                this.location.getWorld().spawnParticle(particle, this.location, 2);
+                this.location.add(this.vector);
                 counter++;
-                Block block = location.getBlock();
-                if (location.getWorld() == null) return;
-                Collection<Entity> entities = location.getWorld().getNearbyEntities(location, 0.1, 0.1, 0.1);
+                final Block block = this.location.getBlock();
+                if (this.location.getWorld() == null) return;
+                final Collection<Entity> entities = this.location.getWorld().getNearbyEntities(this.location, 0.1, 0.1, 0.1);
                 if (block.getType() != Material.AIR) {
                     kill();
                     if (hitBlockAction != null) hitBlockAction.accept(block);
                 } else if ((player != null && (entities.size() > 0 && !entities.contains(player)) || entities.size() > 1) || player == null && entities.size() > 0) {
-                    kill();
+                    if (stopOnHitEntity) kill();
                     if (hitEntityAction != null) {
-                        for (Entity entity : location.getWorld().getNearbyEntities(location, 1, 1, 1)) {
-                            if (entities != player) hitEntityAction.accept(entity);
+                        for (Entity entity : this.location.getWorld().getNearbyEntities(this.location, 1, 1, 1)) {
+                            if (entities != player) hitEntityAction.accept(player, entity);
                         }
                     }
                 } else if (counter > distance) {
@@ -79,14 +87,10 @@ public class SpellProjectile {
     public int getSpeed() {
         return speed;
     }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public Vector getVector() {
-        return vector;
-    }
+    
+	public boolean stopOnHitEntity() {
+		return stopOnHitEntity;
+	}
 
     public void setHitBlockAction(Consumer<Block> hitBlockAction) {
 		this.hitBlockAction = hitBlockAction;
@@ -96,11 +100,11 @@ public class SpellProjectile {
 		return hitBlockAction;
 	}
     
-    public void setHitEntityAction(Consumer<Entity> hitEntityAction) {
+	public void setHitEntityAction(BiConsumer<Player, Entity> hitEntityAction) {
 		this.hitEntityAction = hitEntityAction;
 	}
-    
-    public Consumer<Entity> getHitEntityAction() {
+	
+	public BiConsumer<Player, Entity> getHitEntityAction() {
 		return hitEntityAction;
 	}
 

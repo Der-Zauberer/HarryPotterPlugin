@@ -7,10 +7,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import harrypotterplugin.commands.HarryPotterCommand;
 import harrypotterplugin.items.BroomStickItem;
-import harrypotterplugin.items.WandItem;
 import harrypotterplugin.items.BroomStickItem.BroomstickType;
-import harrypotterplugin.utilities.ExtendedItemStack;
-import harrypotterplugin.utilities.PlayerInventory;
 import harrypotterplugin.items.GoldenFeatherItem;
 import harrypotterplugin.items.HufflepuffsCupItem;
 import harrypotterplugin.items.MagicalAxeItem;
@@ -19,6 +16,9 @@ import harrypotterplugin.items.RavenclawsDiadem;
 import harrypotterplugin.items.SlytherinsLocket;
 import harrypotterplugin.items.SwordOfGryffindorItem;
 import harrypotterplugin.items.TimeTurnerItem;
+import harrypotterplugin.items.WandItem;
+import harrypotterplugin.utilities.ExtendedItemStack;
+import harrypotterplugin.utilities.PlayerInventory;
 
 public class HarryPotterPlugin extends JavaPlugin {
 

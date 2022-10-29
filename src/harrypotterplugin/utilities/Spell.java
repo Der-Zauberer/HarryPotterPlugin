@@ -12,12 +12,14 @@ public class Spell {
     private final String name;
     private final SpellType type;
     private final int mana;
+    private final SpellProjectile spellProjectile;
     private Consumer<Player> spellCastAction;
 
-    public Spell(String name, SpellType type, int mana) {
+    public Spell(String name, SpellType type, int mana, SpellProjectile spellProjectile) {
         this.name = name;
         this.type = type;
         this.mana = mana;
+        this.spellProjectile = spellProjectile;
     }
 
     public void castSpell(Player player) {
@@ -34,6 +36,10 @@ public class Spell {
     
     public int getMana() {
 		return mana;
+	}
+    
+	public SpellProjectile getSpellProjectile() {
+		return spellProjectile;
 	}
     
     public void setSpellCastAction(Consumer<Player> spellCastAction) {
