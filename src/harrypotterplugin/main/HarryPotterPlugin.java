@@ -17,8 +17,10 @@ import harrypotterplugin.items.SlytherinsLocket;
 import harrypotterplugin.items.SwordOfGryffindorItem;
 import harrypotterplugin.items.TimeTurnerItem;
 import harrypotterplugin.items.WandItem;
+import harrypotterplugin.spells.StuporSpell;
 import harrypotterplugin.utilities.ExtendedItemStack;
 import harrypotterplugin.utilities.PlayerInventory;
+import harrypotterplugin.utilities.Spell;
 
 public class HarryPotterPlugin extends JavaPlugin {
 
@@ -30,6 +32,7 @@ public class HarryPotterPlugin extends JavaPlugin {
         registerCommands();
         registerEvents();
         registerItem();
+        registerSpells();
         registerCraftingRecipes();
     }
 
@@ -56,6 +59,10 @@ public class HarryPotterPlugin extends JavaPlugin {
         ExtendedItemStack.registerItem(new HufflepuffsCupItem());
         ExtendedItemStack.registerItem(new RavenclawsDiadem());
         ExtendedItemStack.registerItem(new SlytherinsLocket());
+    }
+    
+    private static void registerSpells() {
+    	Spell.registerSpell(new StuporSpell());
     }
 
     private static void registerCraftingRecipes() {

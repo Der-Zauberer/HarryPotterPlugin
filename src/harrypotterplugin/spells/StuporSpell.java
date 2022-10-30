@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import harrypotterplugin.utilities.Spell;
 import harrypotterplugin.utilities.SpellProjectile;
+import harrypotterplugin.utilities.SpellType;
 public class StuporSpell extends Spell {
 
     public StuporSpell() {

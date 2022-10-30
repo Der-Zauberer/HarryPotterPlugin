@@ -1,19 +1,21 @@
 package harrypotterplugin.utilities;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class Spell {
-
-    public enum SpellType {TRANSFIGURATION, CHARM, CURSE, COUNTER_CHARM, HEALING}
 
     private final String name;
     private final SpellType type;
     private final int mana;
     private final SpellProjectile spellProjectile;
     private Consumer<Player> spellCastAction;
+    
+    private static final ArrayList<Spell> spells = new ArrayList<>();
 
     public Spell(String name, SpellType type, int mana, SpellProjectile spellProjectile) {
         this.name = name;
@@ -48,6 +50,19 @@ public class Spell {
     
     public Consumer<Player> getSpellCastAction() {
 		return spellCastAction;
+	}
+    
+    public ItemStack getItemStack() {
+    	final ExtendedItemStack item = new ExtendedItemStack(name, Material.BOOK);
+    	return item;
+    }
+    
+    public static void registerSpell(Spell spell) {
+    	spells.add(spell);
+    }
+    
+	public static ArrayList<Spell> getSpells() {
+		return spells;
 	}
 
 }
