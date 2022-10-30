@@ -39,7 +39,9 @@ public class SpellProjectile {
     }
 
     public void launch(Player player) {
-        launch(player, player.getLocation(), player.getLocation().getDirection());
+    	final Location location = player.getLocation();
+    	location.setY(player.getLocation().getY() + 1);
+        launch(player, location, player.getLocation().getDirection());
     }
 
     public void launch(Player player, Location location, Vector vector) {
