@@ -20,6 +20,7 @@ import harrypotterplugin.items.WandItem;
 import harrypotterplugin.spells.StuporSpell;
 import harrypotterplugin.utilities.ExtendedItemStack;
 import harrypotterplugin.utilities.PlayerInventory;
+import harrypotterplugin.utilities.PlayerStats;
 import harrypotterplugin.utilities.Spell;
 
 public class HarryPotterPlugin extends JavaPlugin {
@@ -34,6 +35,7 @@ public class HarryPotterPlugin extends JavaPlugin {
         registerItem();
         registerSpells();
         registerCraftingRecipes();
+        PlayerStats.reloadAll();
     }
 
     private static void registerCommands() {
@@ -43,6 +45,7 @@ public class HarryPotterPlugin extends JavaPlugin {
     private static void registerEvents() {
         Bukkit.getPluginManager().registerEvents(PlayerInventory.getListener(), instance);
         Bukkit.getPluginManager().registerEvents(ExtendedItemStack.getListener(), instance);
+        Bukkit.getPluginManager().registerEvents(PlayerStats.getListener(), instance);
     }
 
     private static void registerItem() {
